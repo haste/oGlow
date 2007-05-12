@@ -29,20 +29,72 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------]]
 
-local addon = {
-	createBorder = function(self)
-		if(InCombatLockdown()) then return end
+-- Globally used
+local G = getfenv(0)
+local select = select
+local createBorder = oGlow.createBorder
 
-		local bc = self:CreateTexture(nil, "OVERLAY")
-		bc:SetTexture"Interface\\Buttons\\UI-ActionButton-Border"
-		bc:SetBlendMode"ADD"
-		bc:SetAlpha(.8)
+-- Containers
+local GetContainerItemLink = GetContainerItemLink
+local GetItemQualityColor = GetItemQualityColor
+local GetItemInfo = GetItemInfo
 
-		bc:SetHeight(68)
-		bc:SetWidth(68)
-		bc:SetPoint("CENTER", self, 0, 1)
-		self.bc = bc
-	end,
-}
+-- Addon
+local frame = CreateFrame"Frame"
 
-_G['oGlow'] = addon
+-- TODO: Fix bank and keyring, and nerf BU. Then probably completly rewrite it somehow...
+local update = function(bag, id)
+	if(id < 0) then return end -- I hate you... bank/keyring
+	local fid = id + 1
+	local size = bag.size
+	for i=1, size do
+		local bid = size - i + 1
+		local self = G["ContainerFrame"..fid.."Item"..bid]
+		local link = GetContainerItemLink(id, i)
+
+		if(link) then
+			local q = select(3, GetItemInfo(link))
+			if(q > 1) then
+				if(not self.bc) then createBorder(self) end
+
+				if(self.bc) then
+					local r, g, b = GetItemQualityColor(q)
+					self.bc:SetVertexColor(r, g, b)
+					self.bc:Show()
+				end
+			elseif(self.bc) then
+				self.bc:Hide()
+			end
+		elseif(self.bc) then
+			self.bc:Hide()
+		end
+	end
+end
+
+frame:SetScript("OnEvent", function(self, event, id)
+	if(event == "BAG_UPDATE") then
+		local bid = id + 1
+		local cf = G["ContainerFrame"..bid]
+		if(cf and cf:IsShown()) then
+			update(cf, id)
+		end
+	else
+		for k, v in pairs(ContainerFrame1.bags) do
+			update(G[v], G[v]:GetID())
+		end
+	end
+end)
+
+hooksecurefunc("ContainerFrame_OnShow", function()
+	local self = this
+	if(ContainerFrame1.bagsShown > 0) then frame:RegisterEvent"BAG_UPDATE" end
+	update(self, self:GetID())
+end)
+
+hooksecurefunc("ContainerFrame_OnHide", function()
+	if(ContainerFrame1.bagsShown == 0) then
+		frame:UnregisterEvent"BAG_UPDATE"
+	end
+end)
+
+frame:RegisterEvent"PLAYER_REGEN_ENABLED"

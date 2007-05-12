@@ -29,20 +29,57 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------]]
 
-local addon = {
-	createBorder = function(self)
-		if(InCombatLockdown()) then return end
+-- Globally used
+local G = getfenv(0)
+local createBorder = oGlow.createBorder
 
-		local bc = self:CreateTexture(nil, "OVERLAY")
-		bc:SetTexture"Interface\\Buttons\\UI-ActionButton-Border"
-		bc:SetBlendMode"ADD"
-		bc:SetAlpha(.8)
+-- Addon
+local GetItemQualityColor = GetItemQualityColor
+local GetInventoryItemQuality = GetInventoryItemQuality
 
-		bc:SetHeight(68)
-		bc:SetWidth(68)
-		bc:SetPoint("CENTER", self, 0, 1)
-		self.bc = bc
-	end,
+local items = {
+	[0] = "Ammo",
+	"Head",
+	"Neck",
+	"Shoulder",
+	"Shirt",
+	"Chest",
+	"Waist",
+	"Legs",
+	"Feet",
+	"Wrist",
+	"Hands",
+	"Finger0",
+	"Finger1",
+	"Trinket0",
+	"Trinket1",
+	"Back",
+	"MainHand",
+	"SecondaryHand",
+	"Ranged",
+	"Tabard",
 }
 
-_G['oGlow'] = addon
+local update = function()
+	if(not CharacterFrame:IsShown()) then return end
+	for i, key in pairs(items) do
+		local q = GetInventoryItemQuality("player", i)
+		local self = G["Character"..key.."Slot"]
+
+		if(q and q > 1) then
+			if(not self.bc) then createBorder(self) end
+
+			local r, g, b = GetItemQualityColor(q)
+			self.bc:SetVertexColor(r, g, b)
+			self.bc:Show()
+		elseif(self.bc) then
+			self.bc:Hide()
+		end
+	end
+end
+
+local hook = CreateFrame"Frame"
+hook:SetParent"CharacterFrame"
+hook:SetScript("OnShow", update)
+hook:SetScript("OnEvent", function(self, event, unit) if(unit == "player") then update() end end)
+hook:RegisterEvent"UNIT_INVENTORY_CHANGED"
