@@ -83,3 +83,4 @@ hook:SetParent"CharacterFrame"
 hook:SetScript("OnShow", update)
 hook:SetScript("OnEvent", function(self, event, unit) if(unit == "player") then update() end end)
 hook:RegisterEvent"UNIT_INVENTORY_CHANGED"
+hook:RegisterEvent"PLAYER_REGEN_ENABLED"
