@@ -44,7 +44,7 @@ local hook = CreateFrame"Frame"
 local setQuality = function(self, link)
 	if(link) then
 		local q = select(3, GetItemInfo(link))
-		if(q > 1) then
+		if(q > 0) then
 			if(not self.bc) then createBorder(self) end
 
 			if(self.bc) then
@@ -57,13 +57,15 @@ local setQuality = function(self, link)
 		elseif(self.bc) then
 			self.bc:Hide()
 		end
+	elseif(self.bc) then
+		self.bc:Hide()
 	end
 end
 
-local update = function(self)
+local update = function()
 	for i=1,7 do
-		self["TRADE_PLAYER_ITEM_CHANGED"](i)
-		self["TRADE_TARGET_ITEM_CHANGED"](i)
+		hook["TRADE_PLAYER_ITEM_CHANGED"](i)
+		hook["TRADE_TARGET_ITEM_CHANGED"](i)
 	end
 end
 
@@ -71,14 +73,14 @@ hook["TRADE_SHOW"] = update
 hook["TRADE_UPDATE"] = update
 
 hook["TRADE_PLAYER_ITEM_CHANGED"] = function(index)
-	local self = G["TradePlayerItem"..index.."Name"]
+	local self = G["TradePlayerItem"..index.."ItemButton"]
 	local link = GetTradePlayerItemLink(index)
 
 	setQuality(self, link)
 end
 
 hook["TRADE_TARGET_ITEM_CHANGED"] = function(index)
-	local self = G["TradeRecipientItem"..index.."Name"]
+	local self = G["TradeRecipientItem"..index.."ItemButton"]
 	local link = GetTradeTargetItemLink(index)
 
 	setQuality(self, link)
@@ -87,3 +89,8 @@ end
 hook:SetScript("OnEvent", function(self, event, id)
 	self[event](id)
 end)
+
+hook:RegisterEvent"TRADE_SHOW" -- isn't used?
+hook:RegisterEvent"TRADE_UPDATE" -- isn't used?
+hook:RegisterEvent"TRADE_PLAYER_ITEM_CHANGED"
+hook:RegisterEvent"TRADE_TARGET_ITEM_CHANGED"
