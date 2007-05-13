@@ -44,12 +44,12 @@ local frame = CreateFrame"Frame"
 
 -- TODO: Fix bank and keyring, and nerf BU. Then probably completly rewrite it somehow...
 local update = function(bag, id)
-	if(id < 0) then return end -- I hate you... bank/keyring
+	if(id == -1) then return end -- I hate you... bank
 	local fid = id + 1
 	local size = bag.size
 	for i=1, size do
 		local bid = size - i + 1
-		local self = G["ContainerFrame"..fid.."Item"..bid]
+		local self = G[bag:GetName().."Item"..bid]
 		local link = GetContainerItemLink(id, i)
 
 		if(link) then
