@@ -34,23 +34,20 @@ local G = getfenv(0)
 local select = select
 local createBorder = oGlow.createBorder
 
--- Containers
+-- Bank
 local GetContainerItemLink = GetContainerItemLink
 local GetItemQualityColor = GetItemQualityColor
 local GetItemInfo = GetItemInfo
 
 -- Addon
-local frame = CreateFrame"Frame"
+local hook = CreateFrame"Frame"
+hook:SetParent"BankFrame"
 
--- TODO: Fix bank and keyring, and nerf BU. Then probably completly rewrite it somehow...
-local update = function(bag, id)
-	local size = bag.size
-	local name = bag:GetName()
-	for i=1, size do
-		local bid = size - i + 1
-		local self = G[name.."Item"..bid]
-		local link = GetContainerItemLink(id, i)
-
+local update = function()
+	for i=1, 28 do
+		local self = G["BankFrameItem"..i]
+		local link = GetContainerItemLink(-1, i)
+	
 		if(link) then
 			local q = select(3, GetItemInfo(link))
 			if(q > 1) then
@@ -70,30 +67,6 @@ local update = function(bag, id)
 	end
 end
 
-frame:SetScript("OnEvent", function(self, event, id)
-	if(event == "BAG_UPDATE") then
-		local bid = id + 1
-		local cf = G["ContainerFrame"..bid]
-		if(cf and cf:IsShown()) then
-			update(cf, id)
-		end
-	else
-		for k, v in pairs(ContainerFrame1.bags) do
-			update(G[v], G[v]:GetID())
-		end
-	end
-end)
-
-hooksecurefunc("ContainerFrame_OnShow", function()
-	local self = this
-	if(ContainerFrame1.bagsShown > 0) then frame:RegisterEvent"BAG_UPDATE" end
-	update(self, self:GetID())
-end)
-
-hooksecurefunc("ContainerFrame_OnHide", function()
-	if(ContainerFrame1.bagsShown == 0) then
-		frame:UnregisterEvent"BAG_UPDATE"
-	end
-end)
-
-frame:RegisterEvent"PLAYER_REGEN_ENABLED"
+hook:SetScript("OnShow", update)
+hook:SetScript("OnEvent", update)
+hook:RegisterEvent"PLAYERBANKSLOTS_CHANGED" -- NERF IT!

@@ -1,4 +1,6 @@
 ## Interface: 20003
 core\glow.lua
+
 core\bags.lua
 core\char.lua
+core\bank.lua
