@@ -31,11 +31,13 @@
 
 -- Globally used
 local G = getfenv(0)
+local pairs = pairs
 local createBorder = oGlow.createBorder
 
 -- Addon
 local GetItemQualityColor = GetItemQualityColor
 local GetInventoryItemQuality = GetInventoryItemQuality
+local CharacterFrame = CharacterFrame
 
 local items = {
 	[0] = "Ammo",

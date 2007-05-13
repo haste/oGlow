@@ -41,6 +41,7 @@ local GetItemInfo = GetItemInfo
 
 -- Addon
 local frame = CreateFrame"Frame"
+local ContainerFrame1 = ContainerFrame1
 
 -- TODO: Fix bank and keyring, and nerf BU. Then probably completly rewrite it somehow...
 local update = function(bag, id)
