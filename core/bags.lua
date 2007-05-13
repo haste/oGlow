@@ -72,16 +72,10 @@ local update = function(bag, id)
 end
 
 frame:SetScript("OnEvent", function(self, event, id)
-	if(event == "BAG_UPDATE") then
-		local bid = id + 1
-		local cf = G["ContainerFrame"..bid]
-		if(cf and cf:IsShown()) then
-			update(cf, id)
-		end
-	else
-		for k, v in pairs(ContainerFrame1.bags) do
-			update(G[v], G[v]:GetID())
-		end
+	local bid = id + 1
+	local cf = G["ContainerFrame"..bid]
+	if(cf and cf:IsShown()) then
+		update(cf, id)
 	end
 end)
 
@@ -96,5 +90,3 @@ hooksecurefunc("ContainerFrame_OnHide", function()
 		frame:UnregisterEvent"BAG_UPDATE"
 	end
 end)
-
-frame:RegisterEvent"PLAYER_REGEN_ENABLED"

@@ -31,8 +31,6 @@
 
 local addon = {
 	createBorder = function(self)
-		if(InCombatLockdown()) then return end
-
 		local bc = self:CreateTexture(nil, "OVERLAY")
 		bc:SetTexture"Interface\\Buttons\\UI-ActionButton-Border"
 		bc:SetBlendMode"ADD"
