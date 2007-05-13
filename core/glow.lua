@@ -36,9 +36,10 @@ local addon = {
 		bc:SetBlendMode"ADD"
 		bc:SetAlpha(.8)
 
-		bc:SetHeight(68)
-		bc:SetWidth(68)
-		bc:SetPoint("CENTER", self, 0, 1)
+		bc:SetWidth(70)
+		bc:SetHeight(70)
+
+		bc:SetPoint("CENTER", self)
 		self.bc = bc
 	end,
 }
