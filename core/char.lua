@@ -43,37 +43,46 @@ local CharacterFrame = CharacterFrame
 
 local items = {
 	[0] = "Ammo",
-	"Head",
+	"Head 1",
 	"Neck",
-	"Shoulder",
+	"Shoulder 2",
 	"Shirt",
-	"Chest",
-	"Waist",
-	"Legs",
-	"Feet",
-	"Wrist",
-	"Hands",
+	"Chest 3",
+	"Waist 4",
+	"Legs 5",
+	"Feet 6",
+	"Wrist 7",
+	"Hands 8",
 	"Finger0",
 	"Finger1",
 	"Trinket0",
 	"Trinket1",
 	"Back",
-	"MainHand",
-	"SecondaryHand",
-	"Ranged",
+	"MainHand 9",
+	"SecondaryHand 10",
+	"Ranged 11",
 	"Tabard",
 }
 
 local update = function()
 	if(not CharacterFrame:IsShown()) then return end
-	for i, key in pairs(items) do
+	for i, value in pairs(items) do
 		local q = GetInventoryItemQuality("player", i)
+		local key, index = string.split(" ", value)
 		local self = G["Character"..key.."Slot"]
 
 		if(q and q > 1) then
 			if(not self.bc) then createBorder(self) end
 
-			local r, g, b = GetItemQualityColor(q)
+			local r, g, b
+			if(GetInventoryItemBroken("player", i)) then
+				r, g, b = .9, 0, 0
+			elseif(index and GetInventoryAlertStatus(index) == 3) then
+				r, g, b = 1, 1, 0
+			else
+				r, g, b = GetItemQualityColor(q)
+			end
+
 			self.bc:SetVertexColor(r, g, b)
 			self.bc:Show()
 		elseif(self.bc) then
