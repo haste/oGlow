@@ -29,20 +29,14 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------]]
 
-if(select(4, GetAddOnInfo("Fizzle"))) then return end
-
 -- Globally used
 local G = getfenv(0)
-local pairs = pairs
+local select = select
 local createBorder = oGlow.createBorder
 
--- Addon
-local GetItemQualityColor = GetItemQualityColor
-local GetInventoryItemQuality = GetInventoryItemQuality
-local CharacterFrame = CharacterFrame
+local hook = CreateFrame"Frame"
 
 local items = {
-	[0] = "Ammo",
 	"Head",
 	"Neck",
 	"Shoulder",
@@ -65,25 +59,47 @@ local items = {
 }
 
 local update = function()
-	if(not CharacterFrame:IsShown()) then return end
+	if(not InspectFrame:IsShown()) then return end
 	for i, key in pairs(items) do
-		local q = GetInventoryItemQuality("player", i)
-		local self = G["Character"..key.."Slot"]
+		local link = GetInventoryItemLink("target", i)
+		local self = G["Inspect"..key.."Slot"]
 
-		if(q and q > 1) then
-			if(not self.bc) then createBorder(self) end
+		if(link) then
+			local q = select(3, GetItemInfo(link))
+			if(q and q > 1) then
+				if(not self.bc) then createBorder(self) end
 
-			local r, g, b = GetItemQualityColor(q)
-			self.bc:SetVertexColor(r, g, b)
-			self.bc:Show()
+				local r, g, b = GetItemQualityColor(q)
+				self.bc:SetVertexColor(r, g, b)
+				self.bc:Show()
+			elseif(self.bc) then
+				self.bc:Hide()
+			end
 		elseif(self.bc) then
 			self.bc:Hide()
 		end
 	end
 end
 
-local hook = CreateFrame"Frame"
-hook:SetParent"CharacterFrame"
-hook:SetScript("OnShow", update)
-hook:SetScript("OnEvent", function(self, event, unit) if(unit == "player") then update() end end)
-hook:RegisterEvent"UNIT_INVENTORY_CHANGED"
+hook["PLAYER_TARGET_CHANGED"] = update
+hook["ADDON_LOADED"] = function(addon)
+	if(addon == "Blizzard_InspectUI") then
+		hook:SetScript("OnShow", update)
+		hook:SetParent"InspectFrame"
+
+		hook:RegisterEvent"PLAYER_TARGET_CHANGED"
+		hook:UnregisterEvent"ADDON_LOADED"
+	end
+end
+
+hook:SetScript("OnEvent", function(self, event, ...)
+	self[event](...)
+end)
+
+-- Check if it's already loaded by some add-on
+if(IsAddOnLoaded("Blizzard_InspectUI")) then
+	hook:SetScript("OnShow", update)
+	hook:SetParent"InspectFrame"
+else
+	hook:RegisterEvent"ADDON_LOADED"
+end
