@@ -29,9 +29,12 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------]]
 
+if(select(4, GetAddOnInfo("Fizzle"))) then return end
+
 -- Globally used
 local G = getfenv(0)
 local select = select
+local pairs = pairs
 local createBorder = oGlow.createBorder
 
 local hook = CreateFrame"Frame"
