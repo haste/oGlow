@@ -71,18 +71,17 @@ local update = function()
 		local key, index = string.split(" ", value)
 		local self = G["Character"..key.."Slot"]
 
-		if(q and q > 1) then
+		local r, g, b
+		if(GetInventoryItemBroken("player", i)) then
+			r, g, b = .9, 0, 0
+		elseif(index and GetInventoryAlertStatus(index) == 3) then
+			r, g, b = 1, 1, 0
+		elseif(q and q > 1) then
+			r, g, b = GetItemQualityColor(q)
+		end
+
+		if(r) then
 			if(not self.bc) then createBorder(self) end
-
-			local r, g, b
-			if(GetInventoryItemBroken("player", i)) then
-				r, g, b = .9, 0, 0
-			elseif(index and GetInventoryAlertStatus(index) == 3) then
-				r, g, b = 1, 1, 0
-			else
-				r, g, b = GetItemQualityColor(q)
-			end
-
 			self.bc:SetVertexColor(r, g, b)
 			self.bc:Show()
 		elseif(self.bc) then
