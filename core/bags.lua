@@ -54,7 +54,7 @@ local update = function(bag, id)
 
 		if(link) then
 			local q = select(3, GetItemInfo(link))
-			if(q > 1) then
+			if(q and q > 1) then
 				if(not self.bc) then createBorder(self) end
 
 				if(self.bc) then
