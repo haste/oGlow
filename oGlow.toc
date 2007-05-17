@@ -12,3 +12,4 @@ core\char.lua
 core\inspect.lua
 core\bank.lua
 core\trade.lua
+core\tradeskill.lua

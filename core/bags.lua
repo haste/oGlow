@@ -32,18 +32,17 @@
 -- Globally used
 local G = getfenv(0)
 local select = select
-local createBorder = oGlow.createBorder
+local oGlow = oGlow
 
 -- Containers
 local GetContainerItemLink = GetContainerItemLink
-local GetItemQualityColor = GetItemQualityColor
 local GetItemInfo = GetItemInfo
 
 -- Addon
 local frame = CreateFrame"Frame"
 local ContainerFrame1 = ContainerFrame1
 
--- TODO: Fix bank and keyring, and nerf BU. Then probably completly rewrite it somehow...
+-- TODO: nerf BU
 local update = function(bag, id)
 	local size = bag.size
 	local name = bag:GetName()
@@ -54,17 +53,7 @@ local update = function(bag, id)
 
 		if(link) then
 			local q = select(3, GetItemInfo(link))
-			if(q and q > 1) then
-				if(not self.bc) then createBorder(self) end
-
-				if(self.bc) then
-					local r, g, b = GetItemQualityColor(q)
-					self.bc:SetVertexColor(r, g, b)
-					self.bc:Show()
-				end
-			elseif(self.bc) then
-				self.bc:Hide()
-			end
+			oGlow(self, q)
 		elseif(self.bc) then
 			self.bc:Hide()
 		end

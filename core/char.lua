@@ -34,10 +34,9 @@ if(select(4, GetAddOnInfo("Fizzle"))) then return end
 -- Globally used
 local G = getfenv(0)
 local pairs = pairs
-local createBorder = oGlow.createBorder
+local oGlow = oGlow
 
 -- Addon
-local GetItemQualityColor = GetItemQualityColor
 local GetInventoryItemQuality = GetInventoryItemQuality
 local CharacterFrame = CharacterFrame
 
@@ -71,22 +70,13 @@ local update = function()
 		local key, index = string.split(" ", value)
 		local self = G["Character"..key.."Slot"]
 
-		local r, g, b
 		if(GetInventoryItemBroken("player", i)) then
-			r, g, b = .9, 0, 0
+			q = 100
 		elseif(index and GetInventoryAlertStatus(index) == 3) then
-			r, g, b = 1, 1, 0
-		elseif(q and q > 1) then
-			r, g, b = GetItemQualityColor(q)
+			q = 99
 		end
 
-		if(r) then
-			if(not self.bc) then createBorder(self) end
-			self.bc:SetVertexColor(r, g, b)
-			self.bc:Show()
-		elseif(self.bc) then
-			self.bc:Hide()
-		end
+		oGlow(self, q)
 	end
 end
 

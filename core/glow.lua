@@ -29,19 +29,39 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------]]
 
-local addon = {
-	createBorder = function(self)
-		local bc = self:CreateTexture(nil, "OVERLAY")
-		bc:SetTexture"Interface\\Buttons\\UI-ActionButton-Border"
-		bc:SetBlendMode"ADD"
-		bc:SetAlpha(.8)
+local colorTable = setmetatable({
+	[100] = {r = .9, g = 0, b = 0},
+	[99] = {r = 1, g = 1, b = 0},
+}, {__call = function(self, val)
+	local c = self[val]
+	if(c) then return c.r, c.g, c.b
+	else return GetItemQualityColor(val) end
+end})
 
-		bc:SetWidth(70)
-		bc:SetHeight(70)
+local createBorder = function(self, point)
+	local bc = self:CreateTexture(nil, "OVERLAY")
+	bc:SetTexture"Interface\\Buttons\\UI-ActionButton-Border"
+	bc:SetBlendMode"ADD"
+	bc:SetAlpha(.8)
 
-		bc:SetPoint("CENTER", self)
-		self.bc = bc
-	end,
-}
+	bc:SetWidth(70)
+	bc:SetHeight(70)
 
-_G['oGlow'] = addon
+	bc:SetPoint("CENTER", point or self)
+	self.bc = bc
+end
+
+oGlow = function(self, quality, point)
+	if(quality and quality > 1) then
+		if(not self.bc) then createBorder(self, point) end
+
+		local border = self.bc
+		if(border) then
+			local r, g, b = colorTable(quality)
+			border:SetVertexColor(r, g, b)
+			border:Show()
+		end
+	elseif(self.bc) then
+		self.bc:Hide()
+	end
+end

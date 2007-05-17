@@ -31,10 +31,9 @@
 
 -- Globally used
 local G = getfenv(0)
-local createBorder = oGlow.createBorder
+local oGlow = oGlow
 
 -- Trade
-local GetItemQualityColor = GetItemQualityColor
 local GetItemInfo = GetItemInfo
 local GetTradePlayerItemLink = GetTradePlayerItemLink
 
@@ -44,19 +43,7 @@ local hook = CreateFrame"Frame"
 local setQuality = function(self, link)
 	if(link) then
 		local q = select(3, GetItemInfo(link))
-		if(q > 1) then
-			if(not self.bc) then createBorder(self) end
-
-			if(self.bc) then
-				local r, g, b = GetItemQualityColor(q)
-				self.bc:SetVertexColor(r, g, b)
-				self.bc:Show()
-			elseif(self.bc) then
-				self.bc:Hide()
-			end
-		elseif(self.bc) then
-			self.bc:Hide()
-		end
+		oGlow(self, q)
 	elseif(self.bc) then
 		self.bc:Hide()
 	end
