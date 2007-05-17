@@ -40,9 +40,10 @@ local GetTradePlayerItemLink = GetTradePlayerItemLink
 -- Addon
 local hook = CreateFrame"Frame"
 
+local q
 local setQuality = function(self, link)
 	if(link) then
-		local q = select(3, GetItemInfo(link))
+		q = select(3, GetItemInfo(link))
 		oGlow(self, q)
 	elseif(self.bc) then
 		self.bc:Hide()
@@ -59,16 +60,17 @@ end
 hook["TRADE_SHOW"] = update
 hook["TRADE_UPDATE"] = update
 
+local self, link
 hook["TRADE_PLAYER_ITEM_CHANGED"] = function(index)
-	local self = G["TradePlayerItem"..index.."ItemButton"]
-	local link = GetTradePlayerItemLink(index)
+	self = G["TradePlayerItem"..index.."ItemButton"]
+	link = GetTradePlayerItemLink(index)
 
 	setQuality(self, link)
 end
 
 hook["TRADE_TARGET_ITEM_CHANGED"] = function(index)
-	local self = G["TradeRecipientItem"..index.."ItemButton"]
-	local link = GetTradeTargetItemLink(index)
+	self = G["TradeRecipientItem"..index.."ItemButton"]
+	link = GetTradeTargetItemLink(index)
 
 	setQuality(self, link)
 end

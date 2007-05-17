@@ -63,12 +63,13 @@ local items = {
 	"Tabard",
 }
 
+local q, self
 local update = function()
 	if(not CharacterFrame:IsShown()) then return end
 	for i, value in pairs(items) do
-		local q = GetInventoryItemQuality("player", i)
 		local key, index = string.split(" ", value)
-		local self = G["Character"..key.."Slot"]
+		q = GetInventoryItemQuality("player", i)
+		self = G["Character"..key.."Slot"]
 
 		if(GetInventoryItemBroken("player", i)) then
 			q = 100

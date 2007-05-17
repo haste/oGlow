@@ -51,13 +51,14 @@ local createBorder = function(self, point)
 	self.bc = bc
 end
 
+local border, r, g, b
 oGlow = function(self, quality, point)
 	if(quality and quality > 1) then
 		if(not self.bc) then createBorder(self, point) end
 
-		local border = self.bc
+		border = self.bc
 		if(border) then
-			local r, g, b = colorTable(quality)
+			r, g, b = colorTable(quality)
 			border:SetVertexColor(r, g, b)
 			border:Show()
 		end

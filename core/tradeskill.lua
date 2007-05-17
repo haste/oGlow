@@ -40,26 +40,25 @@ local GetTradeSkillReagentItemLink = GetTradeSkillReagentItemLink
 
 local GetItemInfo = GetItemInfo
 
+local icon, link, q, frame, link, point
 local update = function(id)
-	local icon = G["TradeSkillSkillIcon"]
-	local link = GetTradeSkillItemLink(id)
+	icon = G["TradeSkillSkillIcon"]
+	link = GetTradeSkillItemLink(id)
 
 	if(link) then
-		local q = select(3, GetItemInfo(link))
+		q = select(3, GetItemInfo(link))
 		oGlow(icon, q)
 	elseif(icon.bc) then
 		icon.bc:Hide()
 	end
 
-	-- reagents
-	local reagents = GetTradeSkillNumReagents(id)
-	for i=1, reagents do
-		local frame = G["TradeSkillReagent"..i]
-		local link = GetTradeSkillReagentItemLink(id, i)
+	for i=1, GetTradeSkillNumReagents(id) do
+		frame = G["TradeSkillReagent"..i]
+		link = GetTradeSkillReagentItemLink(id, i)
 
 		if(link) then
-			local q = select(3, GetItemInfo(link))
-			local point = G["TradeSkillReagent"..i.."IconTexture"]
+			q = select(3, GetItemInfo(link))
+			point = G["TradeSkillReagent"..i.."IconTexture"]
 
 			oGlow(frame, q, point)
 		elseif(frame.bc) then

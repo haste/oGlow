@@ -42,13 +42,14 @@ local GetItemInfo = GetItemInfo
 local hook = CreateFrame"Frame"
 hook:SetParent"BankFrame"
 
+local self, link, q
 local update = function()
 	for i=1, 28 do
-		local self = G["BankFrameItem"..i]
-		local link = GetContainerItemLink(-1, i)
+		self = G["BankFrameItem"..i]
+		link = GetContainerItemLink(-1, i)
 	
 		if(link) then
-			local q = select(3, GetItemInfo(link))
+			q = select(3, GetItemInfo(link))
 			oGlow(self, q)
 		elseif(self.bc) then
 			self.bc:Hide()

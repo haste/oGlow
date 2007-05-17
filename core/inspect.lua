@@ -61,6 +61,7 @@ local items = {
 	"Tabard",
 }
 
+local q
 local update = function()
 	if(not InspectFrame:IsShown()) then return end
 	for i, key in pairs(items) do
@@ -68,7 +69,7 @@ local update = function()
 		local self = G["Inspect"..key.."Slot"]
 
 		if(link) then
-			local q = select(3, GetItemInfo(link))
+			q = select(3, GetItemInfo(link))
 			oGlow(self, q)
 		elseif(self.bc) then
 			self.bc:Hide()
