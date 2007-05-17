@@ -29,21 +29,16 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------]]
 
--- Globally used
 local G = getfenv(0)
 local select = select
 local oGlow = oGlow
 
--- Tradeskill
-local GetTradeSkillNumReagents = GetTradeSkillNumReagents
-local GetTradeSkillReagentItemLink = GetTradeSkillReagentItemLink
+-- Craft
 
-local GetItemInfo = GetItemInfo
-
-local icon, link, q, frame, point
+local frame, link, q, icon
 local update = function(id)
-	icon = G["TradeSkillSkillIcon"]
-	link = GetTradeSkillItemLink(id)
+	icon = G["CraftIcon"]
+	link = GetCraftItemLink(id)
 
 	if(link) then
 		q = select(3, GetItemInfo(link))
@@ -52,13 +47,13 @@ local update = function(id)
 		icon.bc:Hide()
 	end
 
-	for i=1, GetTradeSkillNumReagents(id) do
-		frame = G["TradeSkillReagent"..i]
-		link = GetTradeSkillReagentItemLink(id, i)
+	for i=1, GetCraftNumReagents(id) do
+		frame = G["CraftReagent"..i]
+		link = GetCraftReagentItemLink(id, i)
 
 		if(link) then
 			q = select(3, GetItemInfo(link))
-			point = G["TradeSkillReagent"..i.."IconTexture"]
+			point = G["CraftReagent"..i.."IconTexture"]
 
 			oGlow(frame, q, point)
 		elseif(frame.bc) then
@@ -67,14 +62,14 @@ local update = function(id)
 	end
 end
 
-if(IsAddOnLoaded("Blizzard_TradeSkillUI")) then
-	hooksecurefunc("TradeSkillFrame_SetSelection", update)
+if(IsAddOnLoaded("Blizzard_CraftUI")) then
+	hooksecurefunc("CraftFrame_SetSelection", update)
 else
 	local hook = CreateFrame"Frame"
 
 	hook:SetScript("OnEvent", function(self, event, addon)
-		if(addon == "Blizzard_TradeSkillUI") then
-			hooksecurefunc("TradeSkillFrame_SetSelection", update)
+		if(addon == "Blizzard_CraftUI") then
+			hooksecurefunc("CraftFrame_SetSelection", update)
 			hook:UnregisterEvent"ADDON_LOADED"
 			hook:SetScript("OnEvent", nil)
 		end
