@@ -1,4 +1,4 @@
-## Interface: 20003
+## Interface: 20100
 ## Title: oGlow
 ## Author: Haste
 ## X-eMail: troeks@gmail.com
@@ -14,3 +14,4 @@ core\bank.lua
 core\trade.lua
 core\tradeskill.lua
 core\craft.lua
+core\merchant.lua
