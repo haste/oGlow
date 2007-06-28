@@ -82,7 +82,7 @@ frame:SetScript("OnEvent", function(self, event, id)
 	local cf = G["ContainerFrame"..bid]
 	if(cf and cf:IsShown()) then
 		up[cf] = true
-		self:Show()
+		frame:Show()
 	end
 end)
 
