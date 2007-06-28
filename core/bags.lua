@@ -40,9 +40,9 @@ local GetItemInfo = GetItemInfo
 
 -- Addon
 local frame = CreateFrame"Frame"
-local ContainerFrame1 = ContainerFrame1
+frame:Hide()
 
--- TODO: nerf BU
+local ContainerFrame1 = ContainerFrame1
 local bid, self, link, size, name, q
 local update = function(bag, id)
 	size = bag.size
@@ -61,24 +61,44 @@ local update = function(bag, id)
 	end
 end
 
+local delay = 0
+local up = {}
+frame:SetScript("OnUpdate", function(self, elapsed)
+	delay = delay + elapsed
+	if(delay > .05) then
+		for id in pairs(up) do
+			update(id, id:GetID())
+			up[id] = nil
+		end
+
+		delay = 0
+		self:Hide()
+	end
+end)
+
 local cf
 frame:SetScript("OnEvent", function(self, event, id)
 	bid = id + 1
 	local cf = G["ContainerFrame"..bid]
 	if(cf and cf:IsShown()) then
-		update(cf, id)
+		up[cf] = true
+		self:Show()
 	end
 end)
 
 local self
 hooksecurefunc("ContainerFrame_OnShow", function()
 	self = this
-	if(ContainerFrame1.bagsShown > 0) then frame:RegisterEvent"BAG_UPDATE" end
-	update(self, self:GetID())
+	if(ContainerFrame1.bagsShown > 0) then
+		frame:RegisterEvent"BAG_UPDATE"
+		up[self] = true
+		frame:Show()
+	end
 end)
 
 hooksecurefunc("ContainerFrame_OnHide", function()
 	if(ContainerFrame1.bagsShown == 0) then
 		frame:UnregisterEvent"BAG_UPDATE"
+		frame:Hide()
 	end
 end)
