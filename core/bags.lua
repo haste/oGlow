@@ -99,6 +99,7 @@ end)
 hooksecurefunc("ContainerFrame_OnHide", function()
 	if(ContainerFrame1.bagsShown == 0) then
 		frame:UnregisterEvent"BAG_UPDATE"
+		up[self] = nil
 		frame:Hide()
 	end
 end)

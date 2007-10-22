@@ -71,7 +71,9 @@ local update = function()
 		q = GetInventoryItemQuality("player", i)
 		self = G["Character"..key.."Slot"]
 
-		if(GetInventoryItemBroken("player", i)) then
+		if(oGlow.preventCharacter) then
+			q = 0
+		elseif(GetInventoryItemBroken("player", i)) then
 			q = 100
 		elseif(index and GetInventoryAlertStatus(index) == 3) then
 			q = 99
@@ -86,3 +88,5 @@ hook:SetParent"CharacterFrame"
 hook:SetScript("OnShow", update)
 hook:SetScript("OnEvent", function(self, event, unit) if(unit == "player") then update() end end)
 hook:RegisterEvent"UNIT_INVENTORY_CHANGED"
+
+oGlow.updateCharacter = update
