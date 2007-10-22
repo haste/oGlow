@@ -48,7 +48,7 @@ local update = function()
 		self = G["BankFrameItem"..i]
 		link = GetContainerItemLink(-1, i)
 	
-		if(link) then
+		if(link and not oGlow.preventBank) then
 			q = select(3, GetItemInfo(link))
 			oGlow(self, q)
 		elseif(self.bc) then
@@ -60,3 +60,5 @@ end
 hook:SetScript("OnShow", update)
 hook:SetScript("OnEvent", update)
 hook:RegisterEvent"PLAYERBANKSLOTS_CHANGED" -- NERF IT!
+
+oGlow.updateBank = update

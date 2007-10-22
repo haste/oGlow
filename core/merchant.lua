@@ -49,7 +49,7 @@ local update = function()
 		local link = GetMerchantItemLink(index)
 		local button = G["MerchantItem"..i.."ItemButton"]
 
-		if(link) then
+		if(link and not oGlow.preventMerchant) then
 			local q = select(3, GetItemInfo(link))
 			oGlow(button, q)
 		elseif(button.bc) then
@@ -59,3 +59,4 @@ local update = function()
 end
 
 hooksecurefunc("MerchantFrame_Update", update)
+oGlow.updateMerchant = update

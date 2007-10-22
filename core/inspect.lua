@@ -68,7 +68,7 @@ local update = function()
 		local link = GetInventoryItemLink("target", i)
 		local self = G["Inspect"..key.."Slot"]
 
-		if(link) then
+		if(link and not oGlow.preventInspect) then
 			q = select(3, GetItemInfo(link))
 			oGlow(self, q)
 		elseif(self.bc) then
@@ -99,3 +99,5 @@ if(IsAddOnLoaded("Blizzard_InspectUI")) then
 else
 	hook:RegisterEvent"ADDON_LOADED"
 end
+
+oGlow.updateInspect = update

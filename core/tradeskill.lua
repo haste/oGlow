@@ -45,7 +45,7 @@ local update = function(id)
 	icon = G["TradeSkillSkillIcon"]
 	link = GetTradeSkillItemLink(id)
 
-	if(link) then
+	if(link and not oGlow.preventTradeskill) then
 		q = select(3, GetItemInfo(link))
 		oGlow(icon, q)
 	elseif(icon.bc) then
@@ -81,3 +81,5 @@ else
 	end)
 	hook:RegisterEvent"ADDON_LOADED"
 end
+
+oGlow.updateTradeskill = update

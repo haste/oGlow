@@ -52,7 +52,7 @@ local update = function(bag, id)
 		self = G[name.."Item"..bid]
 		link = GetContainerItemLink(id, i)
 
-		if(link) then
+		if(link and not oGlow.preventBags) then
 			q = select(3, GetItemInfo(link))
 			oGlow(self, q)
 		elseif(self.bc) then
@@ -103,3 +103,5 @@ hooksecurefunc("ContainerFrame_OnHide", function()
 		frame:Hide()
 	end
 end)
+
+oGlow.updateBags = update

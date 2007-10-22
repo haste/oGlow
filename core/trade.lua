@@ -42,7 +42,7 @@ local hook = CreateFrame"Frame"
 
 local q
 local setQuality = function(self, link)
-	if(link) then
+	if(link and not oGlow.preventTrade) then
 		q = select(3, GetItemInfo(link))
 		oGlow(self, q)
 	elseif(self.bc) then
@@ -83,3 +83,5 @@ hook:RegisterEvent"TRADE_SHOW" -- isn't used?
 hook:RegisterEvent"TRADE_UPDATE" -- isn't used?
 hook:RegisterEvent"TRADE_PLAYER_ITEM_CHANGED"
 hook:RegisterEvent"TRADE_TARGET_ITEM_CHANGED"
+
+oGlow.updateTrade = update
