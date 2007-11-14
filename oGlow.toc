@@ -11,6 +11,7 @@ core\bags.lua
 core\char.lua
 core\inspect.lua
 core\bank.lua
+core\gbank.lua
 core\trade.lua
 core\tradeskill.lua
 core\craft.lua
