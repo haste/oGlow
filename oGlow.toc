@@ -1,6 +1,7 @@
 ## Interface: 20300
 ## Title: oGlow
 ## Author: Haste
+## Version: 1.2
 ## X-eMail: troeks@gmail.com
 ## X-Website: http://fuxsake.net/
 ## Notes: Make your shiny items... glow in the dark!
