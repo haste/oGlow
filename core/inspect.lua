@@ -38,7 +38,6 @@ local pairs = pairs
 local oGlow = oGlow
 
 local hook = CreateFrame"Frame"
-
 local items = {
 	"Head",
 	"Neck",
@@ -64,8 +63,9 @@ local items = {
 local q
 local update = function()
 	if(not InspectFrame:IsShown()) then return end
+	local unit = InspectFrame.unit
 	for i, key in pairs(items) do
-		local link = GetInventoryItemLink("target", i)
+		local link = GetInventoryItemLink(unit, i)
 		local self = G["Inspect"..key.."Slot"]
 
 		if(link and not oGlow.preventInspect) then

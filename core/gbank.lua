@@ -76,7 +76,6 @@ event:SetScript("OnUpdate", function(self, elapsed)
 		delay = 0
 		self:Hide()
 	end
-
 end)
 
 event:RegisterEvent"GUILDBANKFRAME_OPENED"
