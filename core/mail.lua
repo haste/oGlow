@@ -40,10 +40,11 @@ local update = function(self, event, ...)
 	if(not SendMailFrame:IsShown()) then return end
 
 	for i=1, ATTACHMENTS_MAX_SEND do
-		local q = select(4, GetSendMailItem(i))
+		local link = GetSendMailItemLink(i)
 		local slot = _G["SendMailAttachment"..i]
 
-		if(q and not oGlow.preventMail) then
+		if(link and not oGlow.preventMail) then
+			local q = select(3, GetItemInfo(link))
 			oGlow(slot, q)
 		elseif(slot.bc) then
 			slot.bc:Hide()
