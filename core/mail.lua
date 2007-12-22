@@ -36,7 +36,7 @@ local select = select
 local ATTACHMENTS_MAX_SEND = ATTACHMENTS_MAX_SEND
 local GetSendMailItem = GetSendMailItem
 
-local udate = function(self, event, ...)
+local update = function(self, event, ...)
 	if(not SendMailFrame:IsShown()) then return end
 
 	for i=1, ATTACHMENTS_MAX_SEND do
