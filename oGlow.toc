@@ -1,7 +1,7 @@
 ## Interface: 20300
 ## Title: oGlow
 ## Author: Haste
-## Version: 1.4
+## Version: 1.5
 ## X-eMail: troeks@gmail.com
 ## X-Website: http://fuxsake.net/
 ## Notes: Make your shiny items... glow in the dark!
@@ -17,3 +17,4 @@ core\trade.lua
 core\tradeskill.lua
 core\craft.lua
 core\merchant.lua
+core\mail.lua
