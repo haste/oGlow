@@ -1,4 +1,4 @@
-## Interface: 20300
+## Interface: 20400
 ## Title: oGlow
 ## Author: Haste
 ## Version: 1.5
