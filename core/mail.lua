@@ -81,11 +81,6 @@ addon:SetScript("OnEvent", function(self, event, ...)
 	self[event](self, event, ...)
 end)
 
-addon.MAIL_SHOW = send
-addon.MAIL_SEND_INFO_UPDATE = send
-addon.MAIL_SEND_SUCCESS = send
-addon.MAIL_INBOX_UPDATE = inbox
-
 hooksecurefunc("OpenMail_Update", function(self)
 	if(not InboxFrame.openMailID) then return end
 
@@ -101,6 +96,11 @@ hooksecurefunc("OpenMail_Update", function(self)
 		end
 	end
 end)
+
+addon.MAIL_SHOW = send
+addon.MAIL_SEND_INFO_UPDATE = send
+addon.MAIL_SEND_SUCCESS = send
+addon.MAIL_INBOX_UPDATE = inbox
 
 addon:RegisterEvent"MAIL_SHOW"
 addon:RegisterEvent"MAIL_SEND_INFO_UPDATE"
