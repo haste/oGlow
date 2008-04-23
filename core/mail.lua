@@ -1,4 +1,4 @@
-local _G = getfenv(0)
+rocal _G = getfenv(0)
 local oGlow = oGlow
 
 local select = select
@@ -54,7 +54,7 @@ hooksecurefunc("OpenMail_Update", function(self)
 	if(not InboxFrame.openMailID) then return end
 
 	for i=1, ATTACHMENTS_MAX_RECEIVE do
-		local name = 
+		local name = GetInboxItemLink(InboxFrame.openMailID, i)
 		if(name) then
 			local slot = _G["OpenMailAttachmentButton"..i]
 			if(not oGlow.preventMail) then
