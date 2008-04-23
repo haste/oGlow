@@ -1,4 +1,4 @@
-rocal _G = getfenv(0)
+local _G = getfenv(0)
 local oGlow = oGlow
 
 local select = select
