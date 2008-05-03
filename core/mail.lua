@@ -29,7 +29,7 @@ local inbox = function(self, event)
 		if (index <= numItems) then
 			local hq = 0
 			for j=1, ATTACHMENTS_MAX_RECEIVE do
-				local name = GetInboxItemLink(i, j)
+				local name = GetInboxItemLink(index, j)
 				if(name) then
 					-- I've always thought of (func()) to be completly useless, guess I was wrong
 					hq = math.max(hq, (select(3, GetItemInfo(name))))
@@ -41,7 +41,11 @@ local inbox = function(self, event)
 			elseif(slot.bc) then
 				slot.bc:Hide()
 			end
+
+		elseif(slot.bc) then
+			slot.bc:Hide()
 		end
+		index = index + 1
 	end
 end
 
@@ -66,14 +70,14 @@ hooksecurefunc("OpenMail_Update", function(self)
 	end
 end)
 
+hooksecurefunc("InboxFrame_Update", inbox)
+
 addon.MAIL_SHOW = send
 addon.MAIL_SEND_INFO_UPDATE = send
 addon.MAIL_SEND_SUCCESS = send
-addon.MAIL_INBOX_UPDATE = inbox
 
 addon:RegisterEvent"MAIL_SHOW"
 addon:RegisterEvent"MAIL_SEND_INFO_UPDATE"
 addon:RegisterEvent"MAIL_SEND_SUCCESS"
-addon:RegisterEvent"MAIL_INBOX_UPDATE"
 
 oGlow.updateMail = update
