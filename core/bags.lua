@@ -47,8 +47,15 @@ end)
 
 local cf
 frame:SetScript("OnEvent", function(self, event, id)
-	bid = id + 1
-	local cf = G["ContainerFrame"..bid]
+	local cf
+	for _, bag in ipairs(ContainerFrame1.bags) do
+		bag = _G[bag]
+		if(bag:GetID() == id) then
+			cf = bag
+			break
+		end
+	end
+
 	if(cf and cf:IsShown()) then
 		up[cf] = true
 		frame:Show()
@@ -57,9 +64,11 @@ end)
 
 local self
 hooksecurefunc("ContainerFrame_OnShow", function()
+	ChatFrame1:AddMessage"OnShow"
 	self = this
 	if(ContainerFrame1.bagsShown > 0) then
 		frame:RegisterEvent"BAG_UPDATE"
+		ChatFrame1:AddMessage(self:GetID())
 		up[self] = true
 		frame:Show()
 	end
