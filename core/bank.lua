@@ -28,6 +28,7 @@ end
 
 hook:SetScript("OnShow", update)
 hook:SetScript("OnEvent", update)
-hook:RegisterEvent"PLAYERBANKSLOTS_CHANGED" -- NERF IT!
+hook:RegisterEvent"PLAYERBANKSLOTS_CHANGED"
+hook:RegisterEvent"BAG_UPDATE"
 
 oGlow.updateBank = update
