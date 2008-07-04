@@ -64,11 +64,9 @@ end)
 
 local self
 hooksecurefunc("ContainerFrame_OnShow", function()
-	ChatFrame1:AddMessage"OnShow"
 	self = this
 	if(ContainerFrame1.bagsShown > 0) then
 		frame:RegisterEvent"BAG_UPDATE"
-		ChatFrame1:AddMessage(self:GetID())
 		up[self] = true
 		frame:Show()
 	end
