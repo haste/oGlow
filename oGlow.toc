@@ -5,15 +5,15 @@
 ## X-eMail: troeks@gmail.com
 ## Notes: Make your shiny items... glow in the dark!
 
-core\glow.lua
+glow.lua
 
-core\bags.lua
-core\char.lua
-core\inspect.lua
-core\bank.lua
-core\gbank.lua
-core\trade.lua
-core\tradeskill.lua
-core\craft.lua
-core\merchant.lua
-core\mail.lua
+model\bags.lua
+model\char.lua
+model\inspect.lua
+model\bank.lua
+model\gbank.lua
+model\trade.lua
+model\tradeskill.lua
+model\craft.lua
+model\merchant.lua
+model\mail.lua
