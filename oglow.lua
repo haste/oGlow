@@ -1,4 +1,16 @@
-local oGlow = CreateFrame('Frame', 'oGlow')
+local _VERSION = GetAddOnMetadata(parent, 'version')
+
+local function argcheck(value, num, ...)
+	assert(type(num) == 'number', "Bad argument #2 to 'argcheck' (number expected, got "..type(num)..")")
+
+	for i=1,select("#", ...) do
+		if type(value) == select(i, ...) then return end
+	end
+
+	local types = strjoin(", ", ...)
+	local name = string.match(debugstack(2,2,0), ": in function [`<](.-)['>]")
+	error(("Bad argument #%d to '%s' (%s expected, got %s"):format(num, name, types, type(value)), 3)
+end
 
 local colorTable = setmetatable(
 	{},
@@ -28,6 +40,9 @@ local createBorder = function(self, point)
 	self.oGlowBC = bc
 end
 
+local oGlow = CreateFrame('Frame', 'oGlow')
 function oGlow:RegisterColor(name, r, g, b)
 	colorTable[name] = {r, g, b}
 end
+
+oGlow.version = _VERSION
