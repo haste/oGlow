@@ -1,3 +1,5 @@
+local oGlow = CreateFrame('Frame', 'oGlow')
+
 local colorTable = setmetatable(
 	{},
 
@@ -22,10 +24,6 @@ local createBorder = function(self, point)
 	self.bc = bc
 end
 
-local oGlow = {
-	RegisterColor = function(self, key, r, g, b)
-		colorTable[key] = {r, g, b}
-	end,
-}
-
-_G.oGlow = oGlow
+function oGlow:RegisterColor(name, r, g, b)
+	colorTable[name] = {r, g, b}
+end
