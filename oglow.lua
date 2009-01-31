@@ -28,7 +28,6 @@ local createBorder = function(self, point)
 	self.oGlowBC = bc
 end
 
-
 function oGlow:RegisterColor(name, r, g, b)
 	colorTable[name] = {r, g, b}
 end
