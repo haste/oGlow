@@ -42,7 +42,19 @@ end
 
 local oGlow = CreateFrame('Frame', 'oGlow')
 function oGlow:RegisterColor(name, r, g, b)
-	colorTable[name] = {r, g, b}
+	argcheck(name, 2, 'string', 'number')
+	argcheck(r, 3, 'number')
+	argcheck(g, 4, 'number')
+	argcheck(b, 5, 'number')
+
+	-- Silently fail.
+	if(colorTable[name]) then
+		return nil, string.format('Color [%s] is already registered.', name)
+	else
+		colorTable[name] = {r, g, b}
+	end
+
+	return true
 end
 
 oGlow.version = _VERSION
