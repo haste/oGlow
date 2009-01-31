@@ -1,4 +1,4 @@
-local _VERSION = GetAddOnMetadata(parent, 'version')
+local _VERSION = GetAddOnMetadata('oGlow', 'version')
 
 local function argcheck(value, num, ...)
 	assert(type(num) == 'number', "Bad argument #2 to 'argcheck' (number expected, got "..type(num)..")")
