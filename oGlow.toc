@@ -1,9 +1,8 @@
-## Interface: 20400
+## Interface: 30000
 ## Title: oGlow
 ## Author: Haste
 ## Version: 1.12
 ## X-eMail: troeks@gmail.com
-## X-Website: http://fuxsake.net/
 ## Notes: Make your shiny items... glow in the dark!
 
 core\glow.lua
