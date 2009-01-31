@@ -21,7 +21,7 @@ local createBorder = function(self, point)
 	bc:SetHeight(70)
 
 	bc:SetPoint("CENTER", point or self)
-	self.bc = bc
+	self.oGlowBC = bc
 end
 
 function oGlow:RegisterColor(name, r, g, b)
