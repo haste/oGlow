@@ -1,3 +1,6 @@
+-- Not update - so let's bail out early.
+do return end
+
 local _G = getfenv(0)
 local oGlow = oGlow
 

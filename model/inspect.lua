@@ -1,3 +1,6 @@
+-- Not update - so let's bail out early.
+do return end
+
 if(select(4, GetAddOnInfo("Fizzle"))) then return end
 
 -- Globally used
