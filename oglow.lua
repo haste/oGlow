@@ -247,7 +247,7 @@ function oGlow:UnregisterFilterOnPipe(pipe, filter)
 end
 
 -- Probably very temporary.
-function oGlow:CallFilters(pipe, ...)
+function oGlow:CallFilters(pipe, frame, ...)
 	argcheck(pipe, 2, 'string')
 
 	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
@@ -255,7 +255,21 @@ function oGlow:CallFilters(pipe, ...)
 	local ref = activeFilters[pipe]
 	if(ref) then
 		for _, func in ipairs(ref) do
-			func(...)
+			local color = func(...)
+
+			if(color) then
+				local bc = createBorder(frame)
+				local rgb = colorTable[color]
+
+				if(rgb) then
+					bc:SetVertexColor(rgb[1], rgb[2], rgb[3])
+
+					-- The other filters lost the game.
+					break
+				end
+			elseif(frame.oGlowBC) then
+				frame.oGlowBC:Hide()
+			end
 		end
 	end
 end
