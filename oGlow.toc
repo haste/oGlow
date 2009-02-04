@@ -7,13 +7,15 @@
 
 oglow.lua
 
-model\bags.lua
-model\char.lua
-model\inspect.lua
-model\bank.lua
-model\gbank.lua
-model\trade.lua
-model\tradeskill.lua
-model\craft.lua
-model\merchant.lua
-model\mail.lua
+pipes\bags.lua
+pipes\char.lua
+pipes\inspect.lua
+pipes\bank.lua
+pipes\gbank.lua
+pipes\trade.lua
+pipes\tradeskill.lua
+pipes\craft.lua
+pipes\merchant.lua
+pipes\mail.lua
+
+filters\quality.lua
