@@ -16,8 +16,10 @@ local update = function(id)
 end
 
 local function ADDON_LOADED(self, event, addon)
-	hooksecurefunc("CraftFrame_SetSelection", update)
-	self:UnregisterEvent(event, ADDON_LOADED)
+	if(addon == 'Blizzard_CraftUI') then
+		hooksecurefunc("CraftFrame_SetSelection", update)
+		self:UnregisterEvent(event, ADDON_LOADED)
+	end
 end
 
 local enable = function(self)
