@@ -1,64 +1,57 @@
--- Not update - so let's bail out early.
-do return end
+-- TODO: We should only update the frame _iff_ it's shown. We need a hook to do
+-- that however. And we are far from that point, so let's delay that
+-- optimization...
 
 if(select(4, GetAddOnInfo("Fizzle"))) then return end
 
--- Globally used
-local G = getfenv(0)
-local pairs = pairs
-local oGlow = oGlow
-
--- Addon
-local GetInventoryItemQuality = GetInventoryItemQuality
-local CharacterFrame = CharacterFrame
-
-local items = {
-	[0] = "Ammo",
-	"Head 1",
+local slots = {
+	"Head",
 	"Neck",
-	"Shoulder 2",
+	"Shoulder",
 	"Shirt",
-	"Chest 3",
-	"Waist 4",
-	"Legs 5",
-	"Feet 6",
-	"Wrist 7",
-	"Hands 8",
+	"Chest",
+	"Waist",
+	"Legs",
+	"Feet",
+	"Wrist",
+	"Hands",
 	"Finger0",
 	"Finger1",
 	"Trinket0",
 	"Trinket1",
 	"Back",
-	"MainHand 9",
-	"SecondaryHand 10",
-	"Ranged 11",
+	"MainHand",
+	"SecondaryHand",
+	"Ranged",
 	"Tabard",
+	'Ammo',
 }
 
-local q, key, self
-local update = function()
+local update = function(self)
 	if(not CharacterFrame:IsShown()) then return end
-	for i, value in pairs(items) do
-		key, index = string.split(" ", value)
-		q = GetInventoryItemQuality("player", i)
-		self = G["Character"..key.."Slot"]
 
-		if(oGlow.preventCharacter) then
-			q = 0
-		elseif(GetInventoryItemBroken("player", i)) then
-			q = 100
-		elseif(index and GetInventoryAlertStatus(index) == 3) then
-			q = 99
-		end
+	for key, slotName in ipairs(slots) do
+		-- Ammo is located at 0.
+		local slotID = key % 20
+		local slotFrame = _G['Character' .. slotName .. 'Slot']
+		local slotLink = GetInventoryItemLink('player', slotID)
 
-		oGlow(self, q)
+		self:CallFilters('char', slotFrame, slotLink)
 	end
 end
 
-local hook = CreateFrame"Frame"
-hook:SetParent"CharacterFrame"
-hook:SetScript("OnShow", update)
-hook:SetScript("OnEvent", function(self, event, unit) if(unit == "player") then update() end end)
-hook:RegisterEvent"UNIT_INVENTORY_CHANGED"
+local UNIT_INVENTORY_CHANGED = function(self, event, unit)
+	if(unit == 'player') then
+		update(self)
+	end
+end
 
-oGlow.updateCharacter = update
+local enable = function(self)
+	self:RegisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+end
+
+local disable = function(self)
+	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+end
+
+oGlow:RegisterPipe('char', enable, disable, update)
