@@ -160,7 +160,7 @@ function oGlow:EnablePipe(pipe)
 
 	local ref = pipesTable[pipe]
 	if(ref and not ref.isActive) then
-		ref.enable()
+		ref.enable(self)
 		ref.isActive = true
 
 		return true
@@ -172,7 +172,7 @@ function oGlow:DisablePipe(pipe)
 
 	local ref = pipesTable[pipe]
 	if(ref and ref.isActive) then
-		ref.disable()
+		ref.disable(self)
 		ref.isActive = nil
 
 		return true
@@ -184,7 +184,7 @@ function oGlow:UpdatePipe(pipe)
 
 	local ref = pipesTable[pipe]
 	if(ref and ref.isActive) then
-		ref.update()
+		ref.update(self)
 
 		return true
 	end
