@@ -34,7 +34,7 @@ local inbox = function()
 	end
 end
 
-local letter = function(self)
+local letter = function()
 	if(oGlow:IsPipeEnabled'mail') then
 		if(not InboxFrame.openMailID) then return end
 
