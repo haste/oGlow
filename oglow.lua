@@ -13,6 +13,7 @@ local function argcheck(value, num, ...)
 end
 
 local pipesTable = {}
+local filtersTable = {}
 local activeFilters = {}
 
 local colorTable = setmetatable(
@@ -81,33 +82,56 @@ function oGlow:RegisterPipe(pipe, enable, disable, update)
 	return true
 end
 
-function oGlow:RegisterFilterOnPipe(pipe, filter)
-	argcheck(pipe, 2, 'string')
+function oGlow:RegisterFilter(name, filter)
+	argcheck(name, 2, 'string')
 	argcheck(filter, 3, 'function')
 
-	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
-	if(not activeFilters[pipe]) then activeFilters[pipe] = {} end
+	if(filtersTable[name]) then return nil, 'Filter function is already registered.' end
+	filtersTable[name] = filter
 
-	local ref = activeFilters[pipe]
-	for _, func in ipairs(ref) do
-		if(func == filter) then
-			return nil, 'Filter function is already registered.'
-		end
-	end
-
-	table.insert(ref, filter)
 	return true
+end
+
+function oGlow:RegisterFilterOnPipe(pipe, filter)
+	argcheck(pipe, 2, 'string')
+	argcheck(filter, 3, 'string')
+
+	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
+	if(not filtersTable[filter]) then return nil, 'Filter does not exist.' end
+	if(not activeFilters[pipe]) then
+		activeFilters[pipe] = {}
+		table.insert(activeFilters[pipe], filtersTable[filter])
+	else
+		filter = filtersTable[filter]
+		local ref = activeFilters[pipe]
+
+		for _, func in ipairs(ref) do
+			if(func == filter) then
+				return nil, 'Filter function is already registered.'
+			end
+		end
+
+		table.insert(ref, filter)
+		return true
+	end
 end
 
 function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	argcheck(pipe, 2, 'string')
-	argcheck(filter, 3, 'function')
+	argcheck(filter, 3, 'string')
+
+	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
+	if(not filtersTable[filter]) then return nil, 'Filter does not exist.' end
 
 	local ref = activeFilters[pipe]
 	if(ref) then
+		filter = filtersTable[filter]
+
 		for k, func in ipairs(ref) do
-			table.remove(ref, k)
-			return true
+			if(func == filter) then
+				table.remove(ref, k)
+				return true
+			end
 		end
 	end
 end
