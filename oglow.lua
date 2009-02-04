@@ -12,6 +12,9 @@ local function argcheck(value, num, ...)
 	error(("Bad argument #%d to '%s' (%s expected, got %s"):format(num, name, types, type(value)), 3)
 end
 
+local pipesTable = {}
+local activeFilters = {}
+
 local colorTable = setmetatable(
 	{},
 
@@ -25,7 +28,7 @@ local colorTable = setmetatable(
 		self[val] = {r, g, b}
 
 		return self[val]
-	end},
+	end}
 )
 
 local createBorder = function(self, point)
@@ -56,6 +59,92 @@ function oGlow:RegisterColor(name, r, g, b)
 	end
 
 	return true
+end
+
+function oGlow:RegisterPipe(pipe, enable, disable, update)
+	argcheck(pipe, 2, 'string')
+	argcheck(enable, 3, 'function')
+	argcheck(disable, 4, 'function')
+	argcheck(update, 5, 'function')
+
+	-- Silently fail.
+	if(pipesTable[pipe]) then
+		return nil, string.format('Pipe [%s] is already registered.')
+	else
+		pipesTable[pipe] = {
+			enable = enable;
+			disable = disable;
+			update = update;
+		}
+	end
+
+	return true
+end
+
+function oGlow:RegisterFilterOnPipe(pipe, filter)
+	argcheck(pipe, 2, 'string')
+	argcheck(filter, 3, 'function')
+
+	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
+	if(not activeFilters[pipe]) then activeFilters[pipe] = {} end
+
+	local ref = activeFilters[pipe]
+	for _, func in ipairs(ref) do
+		if(func == filter) then
+			return nil, 'Filter function is already registered.'
+		end
+	end
+
+	table.insert(ref, filter)
+	return true
+end
+
+function oGlow:UnregisterFilterOnPipe(pipe, filter)
+	argcheck(pipe, 2, 'string')
+	argcheck(filter, 3, 'function')
+
+	local ref = activeFilters[pipe]
+	if(ref) then
+		for k, func in ipairs(ref) do
+			table.remove(ref, k)
+			return true
+		end
+	end
+end
+
+function oGlow:EnablePipe(pipe)
+	argcheck(pipe, 2, 'string')
+
+	local ref = pipesTable[pipe]
+	if(ref and not ref.isActive) then
+		ref.enable()
+		ref.isActive = true
+
+		return true
+	end
+end
+
+function oGlow:DisablePipe(pipe)
+	argcheck(pipe, 2, 'string')
+
+	local ref = pipesTable[pipe]
+	if(ref and ref.isActive) then
+		ref.disable()
+		ref.isActive = nil
+
+		return true
+	end
+end
+
+function oGlow:UpdatePipe(pipe)
+	argcheck(pipe, 2, 'string')
+
+	local ref = pipesTable[pipe]
+	if(ref and ref.isActive) then
+		ref.refresh()
+
+		return true
+	end
 end
 
 oGlow.version = _VERSION
