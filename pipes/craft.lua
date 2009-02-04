@@ -20,7 +20,7 @@ local function ADDON_LOADED(self, event, addon)
 	self:UnregisterEvent(event, ADDON_LOADED)
 end
 
-local endable = function(self)
+local enable = function(self)
 	if(IsAddOnLoaded("Blizzard_CraftUI")) then
 		hooksecurefunc("CraftFrame_SetSelection", update)
 	else
