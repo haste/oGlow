@@ -36,7 +36,7 @@ local update = function(self)
 		local slotFrame = _G['Character' .. slotName .. 'Slot']
 		local slotLink = GetInventoryItemLink('player', slotID)
 
-		self:CallFilters('char', slotLink)
+		self:CallFilters('char', slotFrame, slotLink)
 	end
 end
 
