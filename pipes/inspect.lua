@@ -28,13 +28,11 @@ local update = function(self)
 	if(not InspectFrame:IsShown()) then return end
 
 	local unit = InspectFrame.unit
-	for i, key in ipairs(slots) do
+	for i, slotName in next, slots do
 		local itemLink = GetInventoryItemLink(unit, i)
-		local inspectSlot = G["Inspect"..key.."Slot"]
+		local inspectSlot = _G["Inspect"..slotName.."Slot"]
 
-		if(itemLink) then
-			self:CallFilters('inspect', inspectSlot, itemLink)
-		end
+		self:CallFilters('inspect', inspectSlot, itemLink)
 	end
 end
 
