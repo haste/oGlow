@@ -46,7 +46,12 @@ local event_metatable = {
 local createBorder = function(self, point)
 	local bc = self.oGlowBC
 	if(not bc) then
-		bc = self:CreateTexture(nil, "OVERLAY")
+		if(not self:IsObjectType'Frame') then
+			bc = self:GetParent():CreateTexture(nil, 'OVERLAY')
+		else
+			bc = self:CreateTexture(nil, "OVERLAY")
+		end
+
 		bc:SetTexture"Interface\\Buttons\\UI-ActionButton-Border"
 		bc:SetBlendMode"ADD"
 		bc:SetAlpha(.8)
