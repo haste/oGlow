@@ -1,16 +1,12 @@
 local quality = function(...)
-	local quality
+	local quality = -1
 
 	for i=1, select('#', ...) do
 		local itemLink = select(i, ...)
 
 		if(itemLink) then
 			local _, _, itemQuality= GetItemInfo(itemLink)
-			if(quality) then
-				quality = math.max(quality, itemQuality)
-			else
-				quality = itemQuality
-			end
+			quality = math.max(quality, itemQuality)
 		end
 	end
 
