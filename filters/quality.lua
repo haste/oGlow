@@ -1,4 +1,4 @@
-local quality = function(self, itemLink)
+local quality = function(itemLink)
 	local _, _, quality = GetItemInfo(itemLink)
 
 	if(quality > 1) then
