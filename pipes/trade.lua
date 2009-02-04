@@ -6,7 +6,7 @@ local player = function(self, event, index)
 end
 
 local target = function(self, event, index)
-	local slotFrame = G["TradeRecipientItem"..index.."ItemButton"]
+	local slotFrame = _G["TradeRecipientItem"..index.."ItemButton"]
 	local slotLink = GetTradeTargetItemLink(index)
 
 	self:CallFilters('trade', slotFrame, slotLink)
