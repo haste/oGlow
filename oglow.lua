@@ -246,4 +246,18 @@ function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	end
 end
 
+-- Probably very temporary.
+function oGlow:CallFilters(pipe, ...)
+	argcheck(pipe, 2, 'string')
+
+	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
+
+	local ref = activeFilters[pipe]
+	if(ref) then
+		for _, func in ipairs(ref) do
+			func(...)
+		end
+	end
+end
+
 oGlow.version = _VERSION
