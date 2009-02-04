@@ -113,7 +113,7 @@ function oGlow:UpdatePipe(pipe)
 
 	local ref = pipesTable[pipe]
 	if(ref and ref.isActive) then
-		ref.refresh()
+		ref.update()
 
 		return true
 	end
