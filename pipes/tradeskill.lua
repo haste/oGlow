@@ -7,7 +7,7 @@ local update = function(id)
 		end
 
 		for i=1, GetTradeSkillNumReagents(id) do
-			local reagentFrame = _G['TradeSkillReagent'.. i]
+			local reagentFrame = _G['TradeSkillReagent' .. i .. 'IconTexture']
 			local reagentLink = GetTradeSkillReagentItemLink(id, i)
 
 			oGlow:CallFilters('tradeskill', reagentFrame, reagentLink)
