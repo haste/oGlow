@@ -175,6 +175,4 @@ function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	end
 end
 
-
-
 oGlow.version = _VERSION
