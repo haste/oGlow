@@ -1,3 +1,4 @@
+local hook
 local stack = {}
 
 local send = function(self)
@@ -54,8 +55,11 @@ local enable = function(self)
 	self:RegisterEvent('MAIL_SEND_INFO_UPDATE', send)
 	self:RegisterEvent('MAIL_SEND_SUCCESS', send)
 
-	hooksecurefunc("OpenMail_Update", letter)
-	hooksecurefunc("InboxFrame_Update", inbox)
+	if(not hook) then
+		hooksecurefunc("OpenMail_Update", letter)
+		hooksecurefunc("InboxFrame_Update", inbox)
+		hook = true
+	end
 end
 
 local disable = function(self)

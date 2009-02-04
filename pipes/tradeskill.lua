@@ -1,3 +1,5 @@
+local hook
+
 local update = function(id)
 	if(oGlow:IsPipeEnabled'tradeskill') then
 		local itemLink = GetTradeSkillItemLink(id)
@@ -17,14 +19,20 @@ end
 
 local function ADDON_LOADED(self, event, addon)
 	if(addon == 'Blizzard_TradeSkillUI') then
-		hooksecurefunc('TradeSkillFrame_SetSelection', update)
+		if(not hook) then
+			hooksecurefunc('TradeSkillFrame_SetSelection', update)
+			hook = true
+		end
 		self:UnregisterEvent(event, ADDON_LOADED)
 	end
 end
 
 local enable = function(self)
 	if(IsAddOnLoaded("Blizzard_TradeSkillUI")) then
-		hooksecurefunc("TradeSkillFrame_SetSelection", update)
+		if(not hook) then
+			hooksecurefunc("TradeSkillFrame_SetSelection", update)
+			hook = true
+		end
 	else
 		self:RegisterEvent("ADDON_LOADED", ADDON_LOADED)
 	end
