@@ -5,8 +5,11 @@ local quality = function(...)
 		local itemLink = select(i, ...)
 
 		if(itemLink) then
-			local _, _, itemQuality= GetItemInfo(itemLink)
-			quality = math.max(quality, itemQuality)
+			local _, _, itemQuality = GetItemInfo(itemLink)
+
+			if(itemQuality) then
+				quality = math.max(quality, itemQuality)
+			end
 		end
 	end
 
