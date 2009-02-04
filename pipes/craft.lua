@@ -26,7 +26,6 @@ local endable = function(self)
 	else
 		self:RegisterEvent('ADDON_LOADED', ADDON_LOADED)
 	end
-
 end
 
 local disable = function(self)
