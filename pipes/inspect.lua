@@ -1,16 +1,8 @@
--- Not update - so let's bail out early.
-do return end
+-- we might want to merge this with char.lua...
 
 if(select(4, GetAddOnInfo("Fizzle"))) then return end
 
--- Globally used
-local G = getfenv(0)
-local select = select
-local pairs = pairs
-local oGlow = oGlow
-
-local hook = CreateFrame"Frame"
-local items = {
+local slots = {
 	"Head",
 	"Neck",
 	"Shoulder",
@@ -32,44 +24,47 @@ local items = {
 	"Tabard",
 }
 
-local q
-local update = function()
+local update = function(self)
 	if(not InspectFrame:IsShown()) then return end
-	local unit = InspectFrame.unit
-	for i, key in pairs(items) do
-		local link = GetInventoryItemLink(unit, i)
-		local self = G["Inspect"..key.."Slot"]
 
-		if(link and not oGlow.preventInspect) then
-			q = select(3, GetItemInfo(link))
-			oGlow(self, q)
-		elseif(self.bc) then
-			self.bc:Hide()
+	local unit = InspectFrame.unit
+	for i, key in ipairs(slots) do
+		local itemLink = GetInventoryItemLink(unit, i)
+		local inspectSlot = G["Inspect"..key.."Slot"]
+
+		if(itemLink) then
+			self:CallFilters('inspect', inspectSlot, itemLink)
 		end
 	end
 end
 
-hook["PLAYER_TARGET_CHANGED"] = update
-hook["ADDON_LOADED"] = function(addon)
-	if(addon == "Blizzard_InspectUI") then
-		hook:SetScript("OnShow", update)
-		hook:SetParent"InspectFrame"
-
-		hook:RegisterEvent"PLAYER_TARGET_CHANGED"
-		hook:UnregisterEvent"ADDON_LOADED"
+local UNIT_INVENTORY_CHANGED = function(self, event, unit)
+	if(InspectFrame.unit == unit) then
+		update(self)
 	end
 end
 
-hook:SetScript("OnEvent", function(self, event, ...)
-	self[event](...)
-end)
-
--- Check if it's already loaded by some add-on
-if(IsAddOnLoaded("Blizzard_InspectUI")) then
-	hook:SetScript("OnShow", update)
-	hook:SetParent"InspectFrame"
-else
-	hook:RegisterEvent"ADDON_LOADED"
+local function ADDON_LOADED(self, event, addon)
+	if(addon == "Blizzard_InspectUI") then
+		self:RegisterEvent("PLAYER_TARGET_CHANGED", update)
+		self:RegisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+		self:UnregisterEvent("ADDON_LOADED", ADDON_LOADED)
+	end
 end
 
-oGlow.updateInspect = update
+local enable = function(self)
+	if(IsAddOnLoaded("Blizzard_InspectUI")) then
+		self:RegisterEvent('PLAYER_TARGET_CHANGED', update)
+		self:RegisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+	else
+		self:RegisterEvent("ADDON_LOADED", ADDON_LOADED)
+	end
+end
+
+local disable = function(self)
+	self:UnregisterEvent('ADDON_LOADED', ADDON_LOADED)
+	self:UnregisterEvent('PLAYER_TARGET_CHANGED', update)
+	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+end
+
+oGlow:RegisterPipe('inspect', enable, disable, update)
