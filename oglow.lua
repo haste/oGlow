@@ -184,6 +184,12 @@ function oGlow:DisablePipe(pipe)
 	end
 end
 
+function oGlow:IsPipeEnabled(pipe)
+	argcheck(pipe, 2, 'string')
+
+	return pipesTable[pipe].isActive
+end
+
 function oGlow:UpdatePipe(pipe)
 	argcheck(pipe, 2, 'string')
 
