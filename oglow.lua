@@ -44,16 +44,21 @@ local event_metatable = {
 }
 
 local createBorder = function(self, point)
-	local bc = self:CreateTexture(nil, "OVERLAY")
-	bc:SetTexture"Interface\\Buttons\\UI-ActionButton-Border"
-	bc:SetBlendMode"ADD"
-	bc:SetAlpha(.8)
+	local bc = self.oGlowBC
+	if(not bc) then
+		bc = self:CreateTexture(nil, "OVERLAY")
+		bc:SetTexture"Interface\\Buttons\\UI-ActionButton-Border"
+		bc:SetBlendMode"ADD"
+		bc:SetAlpha(.8)
 
-	bc:SetWidth(70)
-	bc:SetHeight(70)
+		bc:SetWidth(70)
+		bc:SetHeight(70)
 
-	bc:SetPoint("CENTER", point or self)
-	self.oGlowBC = bc
+		bc:SetPoint("CENTER", point or self)
+		self.oGlowBC = bc
+	end
+
+	return bc
 end
 
 local oGlow = CreateFrame('Frame', 'oGlow')
