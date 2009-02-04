@@ -263,6 +263,7 @@ function oGlow:CallFilters(pipe, frame, ...)
 
 				if(rgb) then
 					bc:SetVertexColor(rgb[1], rgb[2], rgb[3])
+					bc:Show()
 
 					-- The other filters lost the game.
 					break
