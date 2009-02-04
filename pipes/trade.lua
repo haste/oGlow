@@ -12,23 +12,19 @@ local target = function(self, event, index)
 	self:CallFilters('trade', slotFrame, slotLink)
 end
 
-local update = function(...)
+local update = function(self)
 	for i=1,7 do
-		player(...)
-		target(...)
+		player(self, nil, i)
+		target(self, nil, i)
 	end
 end
 
 local enable = function(self)
-	self:RegisterEvent("TRADE_SHOW", update) -- isn't used?
-	self:RegisterEvent("TRADE_UPDATE", update) -- isn't used?
 	self:RegisterEvent("TRADE_PLAYER_ITEM_CHANGED", player)
 	self:RegisterEvent("TRADE_TARGET_ITEM_CHANGED", target)
 end
 
 local disable = function(self)
-	self:UnregisterEvent("TRADE_SHOW", update) -- isn't used?
-	self:UnregisterEvent("TRADE_UPDATE", update) -- isn't used?
 	self:UnregisterEvent("TRADE_PLAYER_ITEM_CHANGED", player)
 	self:UnregisterEvent("TRADE_TARGET_ITEM_CHANGED", target)
 end
