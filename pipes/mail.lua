@@ -1,6 +1,6 @@
 local stack = {}
 
-local send = function(self, event)
+local send = function(self)
 	if(not SendMailFrame:IsShown()) then return end
 
 	for i=1, ATTACHMENTS_MAX_SEND do
@@ -62,6 +62,12 @@ local disable = function(self)
 	self:UnregisterEvent('MAIL_SHOW', send)
 	self:UnregisterEvent('MAIL_SEND_INFO_UPDATE', send)
 	self:UnregisterEvent('MAIL_SEND_SUCCESS', send)
+end
+
+local update = function(self)
+	send(self)
+	inbox()
+	letter()
 end
 
 oGlow:RegisterPipe('mail', enable, disable, update)
