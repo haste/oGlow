@@ -4,14 +4,14 @@ local update = function(self, event)
 			for i=1, MERCHANT_ITEMS_PER_PAGE do
 				local index = (((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i)
 				local itemLink = GetMerchantItemLink(index)
-				local slotFrame = _G['MerchantFrame' .. i .. 'ItemButton']
+				local slotFrame = _G['MerchantItem' .. i .. 'ItemButton']
 
 				self:CallFilters('merchant', slotFrame, itemLink)
 			end
 		else
 			for i=1, BUYBACK_ITEMS_PER_PAGE do
 				local itemLink = GetBuybackItemInfo(i)
-				local slotFrame = _G['MerchantFrame' .. i .. 'ItemButton']
+				local slotFrame = _G['MerchantItem' .. i .. 'ItemButton']
 
 				self:CallFilters('merchant', slotFrame, itemLink)
 			end
