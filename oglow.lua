@@ -62,6 +62,8 @@ function oGlow:RegisterColor(name, r, g, b)
 	return true
 end
 
+--[[ Pipe API ]]
+
 function oGlow:RegisterPipe(pipe, enable, disable, update)
 	argcheck(pipe, 2, 'string')
 	argcheck(enable, 3, 'function')
@@ -81,6 +83,43 @@ function oGlow:RegisterPipe(pipe, enable, disable, update)
 
 	return true
 end
+
+function oGlow:EnablePipe(pipe)
+	argcheck(pipe, 2, 'string')
+
+	local ref = pipesTable[pipe]
+	if(ref and not ref.isActive) then
+		ref.enable()
+		ref.isActive = true
+
+		return true
+	end
+end
+
+function oGlow:DisablePipe(pipe)
+	argcheck(pipe, 2, 'string')
+
+	local ref = pipesTable[pipe]
+	if(ref and ref.isActive) then
+		ref.disable()
+		ref.isActive = nil
+
+		return true
+	end
+end
+
+function oGlow:UpdatePipe(pipe)
+	argcheck(pipe, 2, 'string')
+
+	local ref = pipesTable[pipe]
+	if(ref and ref.isActive) then
+		ref.refresh()
+
+		return true
+	end
+end
+
+--[[ Filter API ]]
 
 function oGlow:RegisterFilter(name, filter)
 	argcheck(name, 2, 'string')
@@ -136,39 +175,6 @@ function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	end
 end
 
-function oGlow:EnablePipe(pipe)
-	argcheck(pipe, 2, 'string')
 
-	local ref = pipesTable[pipe]
-	if(ref and not ref.isActive) then
-		ref.enable()
-		ref.isActive = true
-
-		return true
-	end
-end
-
-function oGlow:DisablePipe(pipe)
-	argcheck(pipe, 2, 'string')
-
-	local ref = pipesTable[pipe]
-	if(ref and ref.isActive) then
-		ref.disable()
-		ref.isActive = nil
-
-		return true
-	end
-end
-
-function oGlow:UpdatePipe(pipe)
-	argcheck(pipe, 2, 'string')
-
-	local ref = pipesTable[pipe]
-	if(ref and ref.isActive) then
-		ref.refresh()
-
-		return true
-	end
-end
 
 oGlow.version = _VERSION
