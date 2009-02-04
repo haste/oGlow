@@ -18,7 +18,6 @@ local inbox = function()
 		for i=1, INBOXITEMS_TO_DISPLAY do
 			local slotFrame = _G["MailItem"..i.."Button"]
 			if (index <= numItems) then
-				wipe(stack)
 				for j=1, ATTACHMENTS_MAX_RECEIVE do
 					local attachLink = GetInboxItemLink(index, j)
 					if(attachLink) then
@@ -28,6 +27,8 @@ local inbox = function()
 			end
 
 			oGlow:CallFilters('mail', slotFrame, unpack(stack))
+			wipe(stack)
+
 			index = index + 1
 		end
 	end
