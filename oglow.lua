@@ -12,6 +12,9 @@ local function argcheck(value, num, ...)
 	error(("Bad argument #%d to '%s' (%s expected, got %s"):format(num, name, types, type(value)), 3)
 end
 
+local print = function(...) print("|cff33ff99oGlow:|r ", ...) end
+local error = function(...) print("|cffff0000Error:|r "..string.format(...)) end
+
 local pipesTable = {}
 local filtersTable = {}
 local activeFilters = {}
@@ -31,6 +34,14 @@ local colorTable = setmetatable(
 		return self[val]
 	end}
 )
+
+local event_metatable = {
+	__call = function(funcs, self, ...)
+		for _, func in ipairs(funcs) do
+			func(self, ...)
+		end
+	end,
+}
 
 local createBorder = function(self, point)
 	local bc = self:CreateTexture(nil, "OVERLAY")
@@ -61,6 +72,66 @@ function oGlow:RegisterColor(name, r, g, b)
 
 	return true
 end
+
+--[[ Event API ]]
+
+local RegisterEvent = oGlow.RegisterEvent
+function oGlow:RegisterEvent(event, func)
+	argcheck(event, 2, 'string')
+
+	if(type(func) == 'string' and type(self[func]) == 'function') then
+		func = self[func]
+	end
+
+	local curev = self[event]
+	if(curev and func) then
+		if(type(curev) == 'function') then
+			self[event] = setmetatable({curev, func}, event_metatable)
+		else
+			for _, infunc in ipairs(curev) do
+				if(infunc == func) then return end
+			end
+
+			table.insert(curev, func)
+		end
+	elseif(self:IsEventRegistered(event)) then
+		return
+	else
+		if(func) then
+			self[event] = func
+		elseif(not self[event]) then
+			error("Handler for event [%s] does not exist.", event)
+		end
+
+		RegisterEvent(self, event)
+	end
+end
+
+local UnregisterEvent = oGlow.UnregisterEvent
+function oGlow:UnregisterEvent(event, func)
+	argcheck(event, 2, 'string')
+
+	local curev = self[event]
+	if(type(curev) == 'table' and func) then
+		for k, infunc in ipairs(curev) do
+			if(infunc == func) then
+				curev[k] = nil
+
+				if(#curev == 0) then
+					table.remove(curev, k)
+					UnregisterEvent(self, event)
+				end
+			end
+		end
+	else
+		self[event] = nil
+		UnregisterEvent(self, event)
+	end
+end
+
+oGlow:SetScript('OnEvent', function(self, event, ...)
+	self[event](self, event, ...)
+end)
 
 --[[ Pipe API ]]
 
