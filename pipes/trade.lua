@@ -21,12 +21,14 @@ end
 
 local enable = function(self)
 	self:RegisterEvent('TRADE_UPDATE', update)
+	self:RegisterEvent('TRADE_SHOW', update)
 	self:RegisterEvent("TRADE_PLAYER_ITEM_CHANGED", player)
 	self:RegisterEvent("TRADE_TARGET_ITEM_CHANGED", target)
 end
 
 local disable = function(self)
 	self:UnregisterEvent('TRADE_UPDATE', update)
+	self:UnregisterEvent('TRADE_SHOW', update)
 	self:UnregisterEvent("TRADE_PLAYER_ITEM_CHANGED", player)
 	self:UnregisterEvent("TRADE_TARGET_ITEM_CHANGED", target)
 end
