@@ -1,8 +1,10 @@
 local quality = function(itemLink)
-	local _, _, quality = GetItemInfo(itemLink)
+	if(itemLink) then
+		local _, _, quality = GetItemInfo(itemLink)
 
-	if(quality > 1) then
-		return quality
+		if(quality > 1) then
+			return quality
+		end
 	end
 end
 
