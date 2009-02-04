@@ -6,7 +6,11 @@ local quality = function(...)
 
 		if(itemLink) then
 			local _, _, itemQuality= GetItemInfo(itemLink)
-			quality = math.max(quality, itemQuality)
+			if(quality) then
+				quality = math.max(quality, itemQuality)
+			else
+				quality = itemQuality
+			end
 		end
 	end
 
