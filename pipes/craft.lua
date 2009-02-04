@@ -1,52 +1,36 @@
--- Not update - so let's bail out early.
-do return end
-
-local G = getfenv(0)
-local select = select
-local oGlow = oGlow
-
--- Craft
-
-local frame, link, q, icon
 local update = function(id)
-	icon = G["CraftIcon"]
-	link = GetCraftItemLink(id)
+	if(oGlow:IsPipeEnabled'craft') then
+		local itemLink = GetCraftItemLink(id)
 
-	if(link and not oGlow.preventCraft) then
-		q = select(3, GetItemInfo(link))
-		oGlow(icon, q)
-	elseif(icon.bc) then
-		icon.bc:Hide()
-	end
+		if(itemLink) then
+			oGlow:CallFilters('craft', CraftIcon, itemLink)
+		end
 
-	for i=1, GetCraftNumReagents(id) do
-		frame = G["CraftReagent"..i]
-		link = GetCraftReagentItemLink(id, i)
+		for i=1, GetCraftNumReagents(id) do
+			local reagentFrame = _G['CraftReagent'..i..'IconTexture']
+			local reagentLink = GetCraftReagentItemLink(id, i)
 
-		if(link) then
-			q = select(3, GetItemInfo(link))
-			point = G["CraftReagent"..i.."IconTexture"]
-
-			oGlow(frame, q, point)
-		elseif(frame.bc) then
-			frame.bc:Hide()
+			oGlow:CallFilters('craft', reagentFrame, reagentLink)
 		end
 	end
 end
 
-if(IsAddOnLoaded("Blizzard_CraftUI")) then
+local function ADDON_LOADED(self, event, addon)
 	hooksecurefunc("CraftFrame_SetSelection", update)
-else
-	local hook = CreateFrame"Frame"
-
-	hook:SetScript("OnEvent", function(self, event, addon)
-		if(addon == "Blizzard_CraftUI") then
-			hooksecurefunc("CraftFrame_SetSelection", update)
-			hook:UnregisterEvent"ADDON_LOADED"
-			hook:SetScript("OnEvent", nil)
-		end
-	end)
-	hook:RegisterEvent"ADDON_LOADED"
+	self:UnregisterEvent(event, ADDON_LOADED)
 end
 
-oGlow.updateCraft = update
+local endable = function(self)
+	if(IsAddOnLoaded("Blizzard_CraftUI")) then
+		hooksecurefunc("CraftFrame_SetSelection", update)
+	else
+		self:RegisterEvent('ADDON_LOADED', ADDON_LOADED)
+	end
+
+end
+
+local disable = function(self)
+	self:UnregisterEvent('ADDON_LOADED', ADDON_LOADED)
+end
+
+oGlow:RegisterPipe('craft', enable, disable, update)
