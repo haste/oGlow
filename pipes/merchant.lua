@@ -1,50 +1,32 @@
--- Not update - so let's bail out early.
-do return end
+local update = function(self, event)
+	if(MerchantFrame:IsShown()) then
+		if(MerchantFrame.selectedTab == 1) then
+			for i=1, MERCHANT_ITEMS_PER_PAGE do
+				local index = (((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i)
+				local itemLink = GetMerchantItemLink(index)
+				local slotFrame = _G['MerchantFrame' .. i .. 'ItemButton']
 
--- Globally used
-local G = getfenv(0)
-local oGlow = oGlow
-
--- Merchant
-local GetMerchantNumItems = GetMerchantNumItems
-local GetMerchantItemLink = GetMerchantItemLink
-
-local numPage = MERCHANT_ITEMS_PER_PAGE
-
--- Addon
-local MerchantFrame = MerchantFrame
-
-local update = function()
-	if(MerchantFrame.selectedTab == 1) then
-		local numItems = GetMerchantNumItems()
-		for i=1, numPage do
-			local index = (((MerchantFrame.page - 1) * numPage) + i)
-			local link = GetMerchantItemLink(index)
-			local button = G["MerchantItem"..i.."ItemButton"]
-
-			if(link and not oGlow.preventMerchant) then
-				local q = select(3, GetItemInfo(link))
-				oGlow(button, q)
-			elseif(button.bc) then
-				button.bc:Hide()
+				self:CallFilters('merchant', slotFrame, itemLink)
 			end
-		end
-	else
-		local numItems = GetNumBuybackItems()
-		for i=1, numPage do
-			local index = (((MerchantFrame.page - 1) * numPage) + i)
-			local link = GetBuybackItemLink(index)
-			local button = G["MerchantItem"..i.."ItemButton"]
+		else
+			for i=1, BUYBACK_ITEMS_PER_PAGE do
+				local itemLink = GetBuybackItemInfo(i)
+				local slotFrame = _G['MerchantFrame' .. i .. 'ItemButton']
 
-			if(link and not oGlow.preventBuyback) then
-				local q = select(3, GetItemInfo(link))
-				oGlow(button, q)
-			elseif(button.bc) then
-				button.bc:Hide()
+				self:CallFilters('merchant', slotFrame, itemLink)
 			end
 		end
 	end
 end
 
-hooksecurefunc("MerchantFrame_Update", update)
-oGlow.updateMerchant = update
+local enable = function(self)
+	self:RegisterEvent('MERCHANT_UPDATE', update)
+	self:RegisterEvent('MERCHANT_SHOW', update)
+end
+
+local disable = function(self)
+	self:UnregisterEvent('MERCHANT_UPDATE', update)
+	self:UnregisterEvent('MERCHANT_SHOW', update)
+end
+
+oGlow:RegisterPipe('merchant', enable, disable, update)
