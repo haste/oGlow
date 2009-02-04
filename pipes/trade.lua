@@ -1,59 +1,34 @@
--- Not update - so let's bail out early.
-do return end
+local player = function(self, event, index)
+	local slotFrame = _G["TradePlayerItem"..index.."ItemButton"]
+	local slotLink = GetTradePlayerItemLink(index)
 
--- Globally used
-local G = getfenv(0)
-local oGlow = oGlow
-
--- Trade
-local GetItemInfo = GetItemInfo
-local GetTradePlayerItemLink = GetTradePlayerItemLink
-
--- Addon
-local hook = CreateFrame"Frame"
-
-local q
-local setQuality = function(self, link)
-	if(link and not oGlow.preventTrade) then
-		q = select(3, GetItemInfo(link))
-		oGlow(self, q)
-	elseif(self.bc) then
-		self.bc:Hide()
-	end
+	self:CallFilters('trade', slotFrame, slotLink)
 end
 
-local update = function()
+local target = function(self, event, index)
+	local slotFrame = G["TradeRecipientItem"..index.."ItemButton"]
+	local slotLink = GetTradeTargetItemLink(index)
+
+	self:CallFilters('trade', slotFrame, slotLink)
+end
+
+local update = function(...)
 	for i=1,7 do
-		hook["TRADE_PLAYER_ITEM_CHANGED"](i)
-		hook["TRADE_TARGET_ITEM_CHANGED"](i)
+		player(...)
+		target(...)
 	end
 end
 
-hook["TRADE_SHOW"] = update
-hook["TRADE_UPDATE"] = update
-
-local self, link
-hook["TRADE_PLAYER_ITEM_CHANGED"] = function(index)
-	self = G["TradePlayerItem"..index.."ItemButton"]
-	link = GetTradePlayerItemLink(index)
-
-	setQuality(self, link)
+local enable = function(self)
+	self:RegisterEvent("TRADE_SHOW", update) -- isn't used?
+	self:RegisterEvent("TRADE_UPDATE", update) -- isn't used?
+	self:RegisterEvent("TRADE_PLAYER_ITEM_CHANGED", player)
+	self:RegisterEvent("TRADE_TARGET_ITEM_CHANGED", target)
 end
 
-hook["TRADE_TARGET_ITEM_CHANGED"] = function(index)
-	self = G["TradeRecipientItem"..index.."ItemButton"]
-	link = GetTradeTargetItemLink(index)
-
-	setQuality(self, link)
+local disable = function(self)
+	self:UnregisterEvent("TRADE_SHOW", update) -- isn't used?
+	self:UnregisterEvent("TRADE_UPDATE", update) -- isn't used?
+	self:UnregisterEvent("TRADE_PLAYER_ITEM_CHANGED", player)
+	self:UnregisterEvent("TRADE_TARGET_ITEM_CHANGED", target)
 end
-
-hook:SetScript("OnEvent", function(self, event, id)
-	self[event](id)
-end)
-
-hook:RegisterEvent"TRADE_SHOW" -- isn't used?
-hook:RegisterEvent"TRADE_UPDATE" -- isn't used?
-hook:RegisterEvent"TRADE_PLAYER_ITEM_CHANGED"
-hook:RegisterEvent"TRADE_TARGET_ITEM_CHANGED"
-
-oGlow.updateTrade = update
