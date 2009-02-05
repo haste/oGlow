@@ -83,6 +83,18 @@ function oGlow:RegisterColor(name, r, g, b)
 	return true
 end
 
+-- This is a temporary solution. Right now we just want to enable all pipes and
+-- filters.
+function oGlow:PLAYER_LOGIN()
+	for pipe in next, pipesTable do
+		self:EnablePipe(pipe)
+
+		for filter in next, filtersTable do
+			self:RegisterFilterOnPipe(pipe, filter)
+		end
+	end
+end
+
 --[[ Event API ]]
 
 local RegisterEvent = oGlow.RegisterEvent
