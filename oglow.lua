@@ -85,7 +85,7 @@ end
 
 -- This is a temporary solution. Right now we just want to enable all pipes and
 -- filters.
-function oGlow:PLAYER_LOGIN()
+function oGlow:PLAYER_LOGIN(event)
 	for pipe in next, pipesTable do
 		self:EnablePipe(pipe)
 
@@ -93,6 +93,8 @@ function oGlow:PLAYER_LOGIN()
 			self:RegisterFilterOnPipe(pipe, filter)
 		end
 	end
+
+	self:UnregisterEvent(event)
 end
 
 --[[ Event API ]]
@@ -302,5 +304,7 @@ function oGlow:CallFilters(pipe, frame, ...)
 		end
 	end
 end
+
+oGlow:RegisterEvent('PLAYER_LOGIN')
 
 oGlow.version = _VERSION
