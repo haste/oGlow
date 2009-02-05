@@ -1,36 +1,18 @@
--- Not update - so let's bail out early.
-do return end
+local update = function(self)
+	for i=1,28 do
+		local slotFrame = _G['BankFrameItem' .. i]
+		local slotLink = GetContainerItemLink(-1, i)
 
--- Globally used
-local G = getfenv(0)
-local select = select
-local oGlow = oGlow
-
--- Bank
-local GetContainerItemLink = GetContainerItemLink
-local GetItemInfo = GetItemInfo
-
--- Addon
-local hook = CreateFrame"Frame"
-hook:SetParent"BankFrame"
-
-local self, link, q
-local update = function()
-	for i=1, 28 do
-		self = G["BankFrameItem"..i]
-		link = GetContainerItemLink(-1, i)
-	
-		if(link and not oGlow.preventBank) then
-			q = select(3, GetItemInfo(link))
-			oGlow(self, q)
-		elseif(self.bc) then
-			self.bc:Hide()
-		end
+		self:CallFilters('bank', slotFrame, slotLink)
 	end
 end
 
-hook:SetScript("OnShow", update)
-hook:SetScript("OnEvent", update)
-hook:RegisterEvent"PLAYERBANKSLOTS_CHANGED" -- NERF IT!
+local enable = function(self)
+	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED', update)
+end
 
-oGlow.updateBank = update
+local disable = function(self)
+	self:UnregisterEvent('PLAYERBANKSLOTS_CHANGED', update)
+end
+
+oGlow:RegisterPipe('bank', enable, disable, update)
