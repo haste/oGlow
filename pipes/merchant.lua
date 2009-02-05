@@ -10,6 +10,9 @@ local update = function()
 
 				oGlow:CallFilters('merchant', slotFrame, itemLink)
 			end
+
+			local buyBackLink = GetBuybackItemInfo(GetNumBuybackItems())
+			oGlow:CallFilters('merchant', MerchantBuyBackItem, buyBackLink)
 		else
 			for i=1, BUYBACK_ITEMS_PER_PAGE do
 				local itemLink = GetBuybackItemInfo(i)
