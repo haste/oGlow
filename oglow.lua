@@ -148,7 +148,7 @@ end)
 function oGlow:RegisterPipe(pipe, enable, disable, update)
 	argcheck(pipe, 2, 'string')
 	argcheck(enable, 3, 'function')
-	argcheck(disable, 4, 'function')
+	argcheck(disable, 4, 'function', 'nil')
 	argcheck(update, 5, 'function')
 
 	-- Silently fail.
@@ -182,7 +182,7 @@ function oGlow:DisablePipe(pipe)
 
 	local ref = pipesTable[pipe]
 	if(ref and ref.isActive) then
-		ref.disable(self)
+		if(ref.disable) then ref.disable(self) end
 		ref.isActive = nil
 
 		return true
