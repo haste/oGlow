@@ -1,7 +1,3 @@
--- TODO: We should only update the frame _iff_ it's shown. We need a hook to do
--- that however. And we are far from that point, so let's delay that
--- optimization...
-
 if(select(4, GetAddOnInfo("Fizzle"))) then return end
 
 local slots = {
@@ -28,8 +24,6 @@ local slots = {
 }
 
 local update = function(self)
-	if(not CharacterFrame:IsShown()) then return end
-
 	for key, slotName in ipairs(slots) do
 		-- Ammo is located at 0.
 		local slotID = key % 20
