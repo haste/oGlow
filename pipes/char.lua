@@ -1,5 +1,6 @@
 if(select(4, GetAddOnInfo("Fizzle"))) then return end
 
+local hook
 local slots = {
 	"Head",
 	"Neck",
@@ -24,13 +25,15 @@ local slots = {
 }
 
 local update = function(self)
-	for key, slotName in ipairs(slots) do
-		-- Ammo is located at 0.
-		local slotID = key % 20
-		local slotFrame = _G['Character' .. slotName .. 'Slot']
-		local slotLink = GetInventoryItemLink('player', slotID)
+	if(CharacterFrame:IsShown() and oGlow:IsPipeEnabled'char') then
+		for key, slotName in ipairs(slots) do
+			-- Ammo is located at 0.
+			local slotID = key % 20
+			local slotFrame = _G['Character' .. slotName .. 'Slot']
+			local slotLink = GetInventoryItemLink('player', slotID)
 
-		self:CallFilters('char', slotFrame, slotLink)
+			oGlow:CallFilters('char', slotFrame, slotLink)
+		end
 	end
 end
 
@@ -42,6 +45,11 @@ end
 
 local enable = function(self)
 	self:RegisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+
+	if(not hook) then
+		CharacterFrame:SetScript('OnShow', update)
+		hook = true
+	end
 end
 
 local disable = function(self)
