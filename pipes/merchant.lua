@@ -12,7 +12,7 @@ local update = function()
 			end
 
 			local buyBackLink = GetBuybackItemInfo(GetNumBuybackItems())
-			oGlow:CallFilters('merchant', MerchantBuyBackItemSlotTexture, buyBackLink)
+			oGlow:CallFilters('merchant', MerchantBuyBackItemItemButton, buyBackLink)
 		else
 			for i=1, BUYBACK_ITEMS_PER_PAGE do
 				local itemLink = GetBuybackItemInfo(i)
