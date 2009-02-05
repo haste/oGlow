@@ -23,8 +23,4 @@ local enable = function(self)
 	end
 end
 
--- ....
-local disable = function()
-end
-
-oGlow:RegisterPipe('bags', enable, disable, update)
+oGlow:RegisterPipe('bags', enable, nil, update)
