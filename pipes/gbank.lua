@@ -1,11 +1,11 @@
 local update = function(self)
 	local tab = GetCurrentGuildBankTab()
-	for i=1, MAX_GUILDBANK_SLOTS_PER_TAB do
-		local index = math.fmod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
+	for i=1, 98 do
+		local index = math.fmod(i, 14)
 		if(index == 0) then
-			index = NUM_SLOTS_PER_GUILDBANK_GROUP
+			index = 14
 		end
-		local column = math.ceil((i-0.5)/NUM_SLOTS_PER_GUILDBANK_GROUP)
+		local column = math.ceil((i-0.5)/14)
 
 		local slotLink = GetGuildBankItemLink(tab, i)
 		local slotFrame = _G["GuildBankColumn"..column.."Button"..index]
