@@ -23,3 +23,5 @@ local disable = function(self)
 	self:UnregisterEvent('GUILDBANKBAGSLOTS_CHANGED', update)
 	self:UnregisterEvent('GUILDBANKFRAME_OPENED', update)
 end
+
+oGlow:RegisterPipe('gbank', enable, disable, update)
