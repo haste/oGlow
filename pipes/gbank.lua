@@ -1,4 +1,9 @@
 local update = function(self)
+	-- We shouldn't really do this. The correct solution would be to delay the
+	-- event registration until Blizzard_GuildBankUI is loaded, but we use this
+	-- solution for now.
+	if(GuildBankFrame and not GuildBankFrame:IsShown()) then return end
+
 	local tab = GetCurrentGuildBankTab()
 	for i=1, 98 do
 		local index = math.fmod(i, 14)
