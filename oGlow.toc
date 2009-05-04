@@ -1,4 +1,4 @@
-## Interface: 30000
+## Interface: 30100
 ## Title: oGlow
 ## Author: Haste
 ## Version: 1.12
@@ -17,5 +17,6 @@ pipes\tradeskill.lua
 pipes\craft.lua
 pipes\merchant.lua
 pipes\mail.lua
+pipes\eqman.lua
 
 filters\quality.lua
