@@ -45,8 +45,6 @@ local letter = function()
 				local slotFrame = _G["OpenMailAttachmentButton"..i]
 
 				oGlow:CallFilters('mail', slotFrame, itemLink)
-			else
-				break
 			end
 		end
 	end
