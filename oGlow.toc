@@ -16,6 +16,5 @@ pipes\tradeskill.lua
 pipes\craft.lua
 pipes\merchant.lua
 pipes\mail.lua
-pipes\eqman.lua
 
 filters\quality.lua
