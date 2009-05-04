@@ -1,7 +1,6 @@
 ## Interface: 30100
 ## Title: oGlow
 ## Author: Haste
-## Version: 1.12
 ## X-eMail: troeks@gmail.com
 ## Notes: Make your shiny items... glow in the dark!
 
