@@ -17,4 +17,6 @@ pipes\craft.lua
 pipes\merchant.lua
 pipes\mail.lua
 
+displays\border.lua
+
 filters\quality.lua
