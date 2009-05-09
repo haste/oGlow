@@ -1,3 +1,6 @@
+-- local variables.
+local argcheck = oGlow.argcheck
+
 local colorTable = setmetatable(
 	{},
 
@@ -15,7 +18,7 @@ local colorTable = setmetatable(
 )
 
 local createBorder = function(self, point)
-	local bc = self.oGlowBC
+	local bc = self.oGlowBorder
 	if(not bc) then
 		if(not self:IsObjectType'Frame') then
 			bc = self:GetParent():CreateTexture(nil, 'OVERLAY')
@@ -31,7 +34,7 @@ local createBorder = function(self, point)
 		bc:SetHeight(70)
 
 		bc:SetPoint("CENTER", point or self)
-		self.oGlowBC = bc
+		self.oGlowBorder = bc
 	end
 
 	return bc
@@ -46,8 +49,8 @@ local borderDisplay = function(frame, color)
 			bc:SetVertexColor(rgb[1], rgb[2], rgb[3])
 			bc:Show()
 		end
-	elseif(frame.oGlowBC) then
-		frame.oGlowBC:Hide()
+	elseif(frame.oGlowBorder) then
+		frame.oGlowBorder:Hide()
 	end
 end
 
