@@ -45,9 +45,6 @@ local borderDisplay = function(frame, color)
 		if(rgb) then
 			bc:SetVertexColor(rgb[1], rgb[2], rgb[3])
 			bc:Show()
-
-			-- The other filters lost the game.
-			break
 		end
 	elseif(frame.oGlowBC) then
 		frame.oGlowBC:Hide()
