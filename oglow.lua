@@ -244,7 +244,7 @@ function oGlow:CallFilters(pipe, frame, ...)
 		for _, func in ipairs(ref) do
 			local display, action = func(...)
 
-			if(not displaysTable[]) then return nil, 'Display does not exist.' end
+			if(not displaysTable[display]) then return nil, 'Display does not exist.' end
 
 			if(display and action) then
 				display(frame, func(...))
