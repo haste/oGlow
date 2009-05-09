@@ -14,7 +14,7 @@ local quality = function(...)
 	end
 
 	if(quality > 1) then
-		return quality
+		return 'Border', quality
 	end
 end
 
