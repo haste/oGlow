@@ -229,11 +229,12 @@ end
 function oGlow:RegisterDisplay(name, display)
 	argcheck(name, 2, 'string')
 	argcheck(display, 3, 'function')
+
+	displaysTable[name] = display
 end
 
 --[[ General API ]]
 
--- Probably very temporary.
 function oGlow:CallFilters(pipe, frame, ...)
 	argcheck(pipe, 2, 'string')
 
@@ -246,8 +247,8 @@ function oGlow:CallFilters(pipe, frame, ...)
 
 			if(not displaysTable[display]) then return nil, 'Display does not exist.' end
 
-			if(display and action) then
-				display(frame, func(...))
+			if(action) then
+				displaysTable[display](frame, action)
 			end
 		end
 	end
