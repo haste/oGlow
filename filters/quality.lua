@@ -14,8 +14,8 @@ local quality = function(...)
 	end
 
 	if(quality > 1) then
-		return 'Border', quality
+		return quality
 	end
 end
 
-oGlow:RegisterFilter('quality', quality)
+oGlow:RegisterFilter('quality', 'Border', quality)

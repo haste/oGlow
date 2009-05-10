@@ -170,12 +170,13 @@ end
 
 --[[ Filter API ]]
 
-function oGlow:RegisterFilter(name, filter)
+function oGlow:RegisterFilter(name, type, filter)
 	argcheck(name, 2, 'string')
-	argcheck(filter, 3, 'function')
+	argcheck(type, 3, 'string')
+	argcheck(filter, 4, 'function')
 
 	if(filtersTable[name]) then return nil, 'Filter function is already registered.' end
-	filtersTable[name] = filter
+	filtersTable[name] = {type, filter}
 
 	return true
 end
@@ -242,14 +243,11 @@ function oGlow:CallFilters(pipe, frame, ...)
 
 	local ref = activeFilters[pipe]
 	if(ref) then
-		for _, func in ipairs(ref) do
-			local display, action = func(...)
+		for _, filter in ipairs(ref) do
+			local display, func = filter[1], filter[2]
 
 			if(not displaysTable[display]) then return nil, 'Display does not exist.' end
-
-			if(action) then
-				displaysTable[display](frame, action)
-			end
+			displaysTable[display](frame, func(...))
 		end
 	end
 end
