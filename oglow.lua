@@ -23,7 +23,7 @@ local activeFilters = {}
 
 local event_metatable = {
 	__call = function(funcs, self, ...)
-		for _, func in ipairs(funcs) do
+		for _, func in pairs(funcs) do
 			func(self, ...)
 		end
 	end,
@@ -60,7 +60,7 @@ function oGlow:RegisterEvent(event, func)
 		if(type(curev) == 'function') then
 			self[event] = setmetatable({curev, func}, event_metatable)
 		else
-			for _, infunc in ipairs(curev) do
+			for _, infunc in next, curev do
 				if(infunc == func) then return end
 			end
 
@@ -85,7 +85,7 @@ function oGlow:UnregisterEvent(event, func)
 
 	local curev = self[event]
 	if(type(curev) == 'table' and func) then
-		for k, infunc in ipairs(curev) do
+		for k, infunc in pairs(curev) do
 			if(infunc == func) then
 				curev[k] = nil
 
@@ -194,7 +194,7 @@ function oGlow:RegisterFilterOnPipe(pipe, filter)
 		filter = filtersTable[filter]
 		local ref = activeFilters[pipe]
 
-		for _, func in ipairs(ref) do
+		for _, func in next, ref do
 			if(func == filter) then
 				return nil, 'Filter function is already registered.'
 			end
@@ -216,7 +216,7 @@ function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	if(ref) then
 		filter = filtersTable[filter]
 
-		for k, func in ipairs(ref) do
+		for k, func in next, ref do
 			if(func == filter) then
 				table.remove(ref, k)
 				return true
@@ -243,7 +243,7 @@ function oGlow:CallFilters(pipe, frame, ...)
 
 	local ref = activeFilters[pipe]
 	if(ref) then
-		for _, filter in ipairs(ref) do
+		for _, filter in next, ref do
 			local display, func = filter[1], filter[2]
 
 			if(not displaysTable[display]) then return nil, 'Display does not exist.' end
