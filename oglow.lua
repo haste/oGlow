@@ -222,6 +222,18 @@ function oGlow:RegisterFilterOnPipe(pipe, filter)
 	end
 end
 
+function oGlow.IterateFiltersOnPipe(pipe, key)
+	local filters = activeFilters[pipe]
+	if(not filters) then
+		return
+	end
+
+	local n, filter = next(filters, key)
+	if(n) then
+		return n, filter[3], filter[1], filter[4]
+	end
+end
+
 function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	argcheck(pipe, 2, 'string')
 	argcheck(filter, 3, 'string')
