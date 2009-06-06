@@ -107,11 +107,12 @@ end)
 
 --[[ Pipe API ]]
 
-function oGlow:RegisterPipe(pipe, enable, disable, update)
+function oGlow:RegisterPipe(pipe, enable, disable, update, desc)
 	argcheck(pipe, 2, 'string')
 	argcheck(enable, 3, 'function')
 	argcheck(disable, 4, 'function', 'nil')
 	argcheck(update, 5, 'function')
+	argcheck(desc, 6, 'string', 'nil')
 
 	-- Silently fail.
 	if(pipesTable[pipe]) then
@@ -121,6 +122,7 @@ function oGlow:RegisterPipe(pipe, enable, disable, update)
 			enable = enable;
 			disable = disable;
 			update = update;
+			desc = desc;
 		}
 	end
 
