@@ -18,4 +18,4 @@ local quality = function(...)
 	end
 end
 
-oGlow:RegisterFilter('quality', 'Border', quality)
+oGlow:RegisterFilter('quality', 'Border', quality, [[Adds a border to the icons, indicating the quality the items have.]])
