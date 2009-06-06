@@ -191,6 +191,13 @@ function oGlow:RegisterFilter(name, type, filter, desc)
 	return true
 end
 
+function oGlow:IterateFilters(k)
+	local n = next(filtersTable, k)
+	if(n) then
+		return n, filtersTable[n][1], filtersTable[n][3]
+	end
+end
+
 function oGlow:RegisterFilterOnPipe(pipe, filter)
 	argcheck(pipe, 2, 'string')
 	argcheck(filter, 3, 'string')
