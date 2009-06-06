@@ -42,4 +42,4 @@ local disable = function(self)
 	self:UnregisterEvent('ADDON_LOADED', ADDON_LOADED)
 end
 
-oGlow:RegisterPipe('craft', enable, disable, update)
+oGlow:RegisterPipe('craft', enable, disable, update, 'The Blizzard crafting frame.')
