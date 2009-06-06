@@ -172,13 +172,14 @@ end
 
 --[[ Filter API ]]
 
-function oGlow:RegisterFilter(name, type, filter)
+function oGlow:RegisterFilter(name, type, filter, desc)
 	argcheck(name, 2, 'string')
 	argcheck(type, 3, 'string')
 	argcheck(filter, 4, 'function')
+	argcheck(desc, 5, 'string', 'nil')
 
 	if(filtersTable[name]) then return nil, 'Filter function is already registered.' end
-	filtersTable[name] = {type, filter}
+	filtersTable[name] = {type, filter, desc}
 
 	return true
 end
