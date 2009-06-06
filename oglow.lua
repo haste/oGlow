@@ -186,7 +186,7 @@ function oGlow:RegisterFilter(name, type, filter, desc)
 	argcheck(desc, 5, 'string', 'nil')
 
 	if(filtersTable[name]) then return nil, 'Filter function is already registered.' end
-	filtersTable[name] = {type, filter, desc}
+	filtersTable[name] = {type, filter, name, desc}
 
 	return true
 end
@@ -194,7 +194,7 @@ end
 function oGlow:IterateFilters(k)
 	local n = next(filtersTable, k)
 	if(n) then
-		return n, filtersTable[n][1], filtersTable[n][3]
+		return n, filtersTable[n][1], filtersTable[n][4]
 	end
 end
 
