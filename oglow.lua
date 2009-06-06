@@ -129,6 +129,13 @@ function oGlow:RegisterPipe(pipe, enable, disable, update, desc)
 	return true
 end
 
+function oGlow:IteratePipes(k)
+	local n = next(pipesTable, k)
+	if(n) then
+		return n, pipesTable[n].isActive, pipesTable[n].desc
+	end
+end
+
 function oGlow:EnablePipe(pipe)
 	argcheck(pipe, 2, 'string')
 
