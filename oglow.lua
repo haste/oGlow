@@ -198,6 +198,7 @@ function oGlow:IterateFilters(k)
 	end
 end
 
+-- TODO: Validate that the display we try to use actually exists.
 function oGlow:RegisterFilterOnPipe(pipe, filter)
 	argcheck(pipe, 2, 'string')
 	argcheck(filter, 3, 'string')
@@ -205,11 +206,14 @@ function oGlow:RegisterFilterOnPipe(pipe, filter)
 	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
 	if(not filtersTable[filter]) then return nil, 'Filter does not exist.' end
 	if(not activeFilters[pipe]) then
+		local filterTable = filtersTable[filter]
+		local display = filterTable[1]
 		activeFilters[pipe] = {}
-		table.insert(activeFilters[pipe], filtersTable[filter])
+		activeFilters[pipe][display] = {}
+		table.insert(activeFilters[pipe][display], filterTable)
 	else
-		filter = filtersTable[filter]
-		local ref = activeFilters[pipe]
+		local filterTable = filtersTable[filter]
+		local ref = activeFilters[pipe][filterTable[1]]
 
 		for _, func in next, ref do
 			if(func == filter) then
@@ -217,11 +221,12 @@ function oGlow:RegisterFilterOnPipe(pipe, filter)
 			end
 		end
 
-		table.insert(ref, filter)
+		table.insert(ref, filterTable)
 		return true
 	end
 end
 
+-- TODO: Fix this so it actually works again.
 function oGlow.IterateFiltersOnPipe(pipe, key)
 	local filters = activeFilters[pipe]
 	if(not filters) then
@@ -234,6 +239,7 @@ function oGlow.IterateFiltersOnPipe(pipe, key)
 	end
 end
 
+-- TODO: Fix this so it actually works again.
 function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	argcheck(pipe, 2, 'string')
 	argcheck(filter, 3, 'string')
@@ -272,11 +278,16 @@ function oGlow:CallFilters(pipe, frame, ...)
 
 	local ref = activeFilters[pipe]
 	if(ref) then
-		for _, filter in next, ref do
-			local display, func = filter[1], filter[2]
-
+		for display, filters in next, ref do
+			-- TODO: Move this check out of the loop.
 			if(not displaysTable[display]) then return nil, 'Display does not exist.' end
-			displaysTable[display](frame, func(...))
+
+			for _, filter in next, filters do
+				local func = filter[2]
+
+				-- drop out of the loop if we actually do something nifty on a frame.
+				if(displaysTable[display](frame, func(...))) then break end
+			end
 		end
 	end
 end
