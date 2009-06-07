@@ -49,6 +49,8 @@ local borderDisplay = function(frame, color)
 			bc:SetVertexColor(rgb[1], rgb[2], rgb[3])
 			bc:Show()
 		end
+
+		return true
 	elseif(frame.oGlowBorder) then
 		frame.oGlowBorder:Hide()
 	end
