@@ -11,7 +11,7 @@ local colorTable = setmetatable(
 	{__index = function(self, val)
 		argcheck(val, 2, 'number')
 		local r, g, b = GetItemQualityColor(val)
-		self[val] = {r, g, b}
+		rawset(self, val, {r, g, b})
 
 		return self[val]
 	end}
@@ -61,10 +61,10 @@ function oGlow:RegisterColor(name, r, g, b)
 	argcheck(b, 5, 'number')
 
 	-- Silently fail.
-	if(colorTable[name]) then
+	if(rawget(colorTable, name)) then
 		return nil, string.format('Color [%s] is already registered.', name)
 	else
-		colorTable[name] = {r, g, b}
+		rawset(colorTable, name, {r, g, b})
 	end
 
 	return true
