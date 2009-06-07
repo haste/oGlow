@@ -20,3 +20,4 @@ pipes\mail.lua
 displays\border.lua
 
 filters\quality.lua
+filters\quest.lua
