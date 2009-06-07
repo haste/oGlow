@@ -228,6 +228,8 @@ end
 
 -- TODO: Fix this so it actually works again.
 function oGlow.IterateFiltersOnPipe(pipe, key)
+	do return end
+
 	local filters = activeFilters[pipe]
 	if(not filters) then
 		return
@@ -249,7 +251,6 @@ function oGlow:UnregisterFilterOnPipe(pipe, filter)
 
 	local ref = activeFilters[pipe]
 	if(ref) then
-		filter = filtersTable[filter]
 
 		for k, func in next, ref do
 			if(func == filter) then
