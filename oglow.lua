@@ -241,7 +241,6 @@ function oGlow.IterateFiltersOnPipe(pipe, key)
 	end
 end
 
--- TODO: Fix this so it actually works again.
 function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	argcheck(pipe, 2, 'string')
 	argcheck(filter, 3, 'string')
@@ -249,11 +248,11 @@ function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
 	if(not filtersTable[filter]) then return nil, 'Filter does not exist.' end
 
-	local ref = activeFilters[pipe]
+	local filterTable = filtersTable[filter]
+	local ref = activeFilters[pipe][filterTable[1]]
 	if(ref) then
-
 		for k, func in next, ref do
-			if(func == filter) then
+			if(func == filterTable) then
 				table.remove(ref, k)
 				return true
 			end
