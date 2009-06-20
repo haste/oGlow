@@ -129,10 +129,16 @@ function oGlow:RegisterPipe(pipe, enable, disable, update, desc)
 	return true
 end
 
-function oGlow:IteratePipes(k)
-	local n = next(pipesTable, k)
-	if(n) then
-		return n, pipesTable[n].isActive, pipesTable[n].desc
+do
+	local function iter(_, n)
+		local n, t = next(pipesTable, n)
+		if(t) then
+			return n, t.isActive, t.desc
+		end
+	end
+
+	function oGlow.IteratePipes()
+		return iter, nil, nil
 	end
 end
 
