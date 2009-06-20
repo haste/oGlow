@@ -191,10 +191,16 @@ function oGlow:RegisterFilter(name, type, filter, desc)
 	return true
 end
 
-function oGlow:IterateFilters(k)
-	local n = next(filtersTable, k)
-	if(n) then
-		return n, filtersTable[n][1], filtersTable[n][4]
+do
+	local function iter(_, n)
+		local n, t = next(filtersTable, n)
+		if(t) then
+			return n, t[1], t[4]
+		end
+	end
+
+	function oGlow.IterateFilters()
+		return iter, nil, nil
 	end
 end
 
