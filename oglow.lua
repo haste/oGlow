@@ -238,18 +238,19 @@ function oGlow:RegisterFilterOnPipe(pipe, filter)
 	end
 end
 
--- TODO: Fix this so it actually works again.
-function oGlow.IterateFiltersOnPipe(pipe, key)
-	do return end
+do
+	local t
+	local iter = coroutine.wrap(function()
+		for _, sub in next, t do
+			for k, v in next, sub do
+				coroutine.yield(v[3], v[1], v[4])
+			end
+		end
+	end)
 
-	local filters = activeFilters[pipe]
-	if(not filters) then
-		return
-	end
-
-	local n, filter = next(filters, key)
-	if(n) then
-		return n, filter[3], filter[1], filter[4]
+	oGlow.IterateFiltersOnPipe = function(pipe)
+		t = activeFilters[pipe]
+		return iter
 	end
 end
 
