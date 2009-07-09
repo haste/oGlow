@@ -33,16 +33,18 @@ local oGlow = CreateFrame('Frame', 'oGlow')
 
 -- This is a temporary solution. Right now we just want to enable all pipes and
 -- filters.
-function oGlow:PLAYER_LOGIN(event)
-	for pipe in next, pipesTable do
-		self:EnablePipe(pipe)
+function oGlow:ADDON_LOADED(event, addon)
+	if(addon == 'oGlow') then
+		for pipe in next, pipesTable do
+			self:EnablePipe(pipe)
 
-		for filter in next, filtersTable do
-			self:RegisterFilterOnPipe(pipe, filter)
+			for filter in next, filtersTable do
+				self:RegisterFilterOnPipe(pipe, filter)
+			end
 		end
-	end
 
-	self:UnregisterEvent(event)
+		self:UnregisterEvent(event)
+	end
 end
 
 --[[ Event API ]]
@@ -305,7 +307,7 @@ function oGlow:CallFilters(pipe, frame, ...)
 	end
 end
 
-oGlow:RegisterEvent('PLAYER_LOGIN')
+oGlow:RegisterEvent('ADDON_LOADED')
 
 oGlow.argcheck = argcheck
 
