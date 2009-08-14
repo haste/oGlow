@@ -43,7 +43,7 @@ function oGlow:ADDON_LOADED(event, addon)
 			end
 		end
 
-		self:UnregisterEvent(event)
+		self:UnregisterEvent(event, self.ADDON_LOADED)
 	end
 end
 
