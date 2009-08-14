@@ -47,7 +47,7 @@ local enable = function(self)
 	self:RegisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
 
 	if(not hook) then
-		CharacterFrame:SetScript('OnShow', update)
+		CharacterFrame:HookScript('OnShow', update)
 		hook = true
 	end
 end
