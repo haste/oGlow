@@ -31,4 +31,4 @@ local enable = function(self)
 	end
 end
 
-oGlow:RegisterPipe('merchant', enable, nil, update, 'The Blizzard merchant and buyback frame.')
+oGlow:RegisterPipe('merchant', enable, nil, update, 'Blizzard Vendor Frame', nil)

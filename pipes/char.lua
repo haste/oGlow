@@ -56,4 +56,4 @@ local disable = function(self)
 	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
 end
 
-oGlow:RegisterPipe('char', enable, disable, update, [[The Blizzard character frame.]])
+oGlow:RegisterPipe('char', enable, disable, update, 'Blizzard Character Frame', nil)

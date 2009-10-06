@@ -74,4 +74,4 @@ local update = function(self)
 	letter()
 end
 
-oGlow:RegisterPipe('mail', enable, disable, update, [[The Blizzard mail frame. This is for both the inbox frame and the send frame.]])
+oGlow:RegisterPipe('mail', enable, disable, update, 'Blizzard Mail Frame', nil)

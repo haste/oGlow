@@ -75,4 +75,4 @@ local disable = function(self)
 	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
 end
 
-oGlow:RegisterPipe('inspect', enable, disable, update, 'The Blizzard inspect frame.')
+oGlow:RegisterPipe('inspect', enable, disable, update, 'Blizzard Inspect Frame', nil)

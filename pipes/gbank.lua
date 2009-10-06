@@ -29,4 +29,4 @@ local disable = function(self)
 	self:UnregisterEvent('GUILDBANKFRAME_OPENED', update)
 end
 
-oGlow:RegisterPipe('gbank', enable, disable, update, 'The Blizzard guild bank frame.')
+oGlow:RegisterPipe('gbank', enable, disable, update, 'Blizzard Guild Bank Frame', nil)

@@ -23,4 +23,4 @@ local enable = function(self)
 	end
 end
 
-oGlow:RegisterPipe('bags', enable, nil, update, [[The Blizzard container frames. These are mainly used for display of character bags and bank bags.]])
+oGlow:RegisterPipe('bags', enable, nil, update, 'Blizzard Bag Frames', nil)

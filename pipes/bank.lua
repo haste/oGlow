@@ -19,4 +19,4 @@ local disable = function(self)
 	self:UnregisterEvent('PLAYERBANKSLOTS_CHANGED', update)
 end
 
-oGlow:RegisterPipe('bank', enable, disable, update, [[The Blizzard character bank frame.]])
+oGlow:RegisterPipe('bank', enable, disable, update, 'Blizzard Player Bank Frame', nil)

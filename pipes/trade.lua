@@ -33,4 +33,4 @@ local disable = function(self)
 	self:UnregisterEvent("TRADE_TARGET_ITEM_CHANGED", target)
 end
 
-oGlow:RegisterPipe('trade', enable, disable, update, 'The Blizzard trade frame.')
+oGlow:RegisterPipe('trade', enable, disable, update, 'Blizzard Trade Frame', nil)

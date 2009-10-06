@@ -109,12 +109,13 @@ end)
 
 --[[ Pipe API ]]
 
-function oGlow:RegisterPipe(pipe, enable, disable, update, desc)
+function oGlow:RegisterPipe(pipe, enable, disable, update, name, desc)
 	argcheck(pipe, 2, 'string')
 	argcheck(enable, 3, 'function')
 	argcheck(disable, 4, 'function', 'nil')
 	argcheck(update, 5, 'function')
-	argcheck(desc, 6, 'string', 'nil')
+	argcheck(name, 6, 'string', 'nil')
+	argcheck(desc, 7, 'string', 'nil')
 
 	-- Silently fail.
 	if(pipesTable[pipe]) then
@@ -123,6 +124,7 @@ function oGlow:RegisterPipe(pipe, enable, disable, update, desc)
 		pipesTable[pipe] = {
 			enable = enable;
 			disable = disable;
+			name = name;
 			update = update;
 			desc = desc;
 		}
@@ -135,7 +137,7 @@ do
 	local function iter(_, n)
 		local n, t = next(pipesTable, n)
 		if(t) then
-			return n, t.isActive, t.desc
+			return n, t.isActive, t.name, t.desc
 		end
 	end
 
