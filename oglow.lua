@@ -19,6 +19,9 @@ local pipesTable = {}
 local filtersTable = {}
 local displaysTable = {}
 
+local numPipes = 0
+local numFilters = 0
+
 local activeFilters = {}
 
 local event_metatable = {
@@ -121,6 +124,8 @@ function oGlow:RegisterPipe(pipe, enable, disable, update, name, desc)
 	if(pipesTable[pipe]) then
 		return nil, string.format('Pipe [%s] is already registered.')
 	else
+		numPipes = numPipes + 1
+
 		pipesTable[pipe] = {
 			enable = enable;
 			disable = disable;
@@ -187,6 +192,10 @@ function oGlow:UpdatePipe(pipe)
 	end
 end
 
+function oGlow:GetNumPipes()
+	return numPipes
+end
+
 --[[ Filter API ]]
 
 function oGlow:RegisterFilter(name, type, filter, desc)
@@ -197,6 +206,8 @@ function oGlow:RegisterFilter(name, type, filter, desc)
 
 	if(filtersTable[name]) then return nil, 'Filter function is already registered.' end
 	filtersTable[name] = {type, filter, name, desc}
+
+	numFilters = numFilters + 1
 
 	return true
 end
@@ -275,6 +286,10 @@ function oGlow:UnregisterFilterOnPipe(pipe, filter)
 			end
 		end
 	end
+end
+
+function oGlow:GetNumFilters()
+	return numFilters
 end
 
 --[[ Display API ]]
