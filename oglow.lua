@@ -109,7 +109,7 @@ function oGlow:UnregisterEvent(event, func)
 end
 
 oGlow:SetScript('OnEvent', function(self, event, ...)
-	self[event](self, event, ...)
+	return self[event](self, event, ...)
 end)
 
 --[[ Pipe API ]]
