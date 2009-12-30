@@ -77,7 +77,7 @@ function oGlow:RegisterEvent(event, func)
 		if(func) then
 			self[event] = func
 		elseif(not self[event]) then
-			error("Handler for event [%s] does not exist.", event)
+			return error("Handler for event [%s] does not exist.", event)
 		end
 
 		RegisterEvent(self, event)
