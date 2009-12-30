@@ -90,7 +90,7 @@ function oGlow:UnregisterEvent(event, func)
 
 	local curev = self[event]
 	if(type(curev) == 'table' and func) then
-		for k, infunc in pairs(curev) do
+		for k, infunc in next, curev do
 			if(infunc == func) then
 				curev[k] = nil
 
@@ -98,6 +98,8 @@ function oGlow:UnregisterEvent(event, func)
 					table.remove(curev, k)
 					UnregisterEvent(self, event)
 				end
+
+				break
 			end
 		end
 	else
