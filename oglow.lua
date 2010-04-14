@@ -316,8 +316,8 @@ function oGlow:CallFilters(pipe, frame, ...)
 			-- TODO: Move this check out of the loop.
 			if(not displaysTable[display]) then return nil, 'Display does not exist.' end
 
-			for _, filter in next, filters do
-				local func = filter[2]
+			for i=1,#filters do
+				local func = filters[i][2]
 
 				-- drop out of the loop if we actually do something nifty on a frame.
 				if(displaysTable[display](frame, func(...))) then break end
