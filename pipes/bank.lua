@@ -1,6 +1,10 @@
+-- TODO:
+--  - Clean up the dupe code.
+--  - Write a description.
+
 local update = function(self)
 	if(BankFrame:IsShown()) then
-		for i=1, NUM_BANKGENERIC_SLOTS do
+		for i=1, NUM_BANKGENERIC_SLOTS or 28 do
 			local slotFrame = _G['BankFrameItem' .. i]
 			local slotLink = GetContainerItemLink(-1, i)
 
@@ -17,6 +21,10 @@ end
 local disable = function(self)
 	self:UnregisterEvent('BANKFRAME_OPENED', update)
 	self:UnregisterEvent('PLAYERBANKSLOTS_CHANGED', update)
+
+	for i=1, NUM_BANKGENERIC_SLOTS or 28 do
+		self:CallFilters('bank', _G['BankFrameItem' .. i])
+	end
 end
 
 oGlow:RegisterPipe('bank', enable, disable, update, 'Blizzard Player Bank Frame', nil)
