@@ -1,27 +1,14 @@
+-- TODO:
+--  - Clean up the dupe code.
+--  - Write a description.
+
 if(select(4, GetAddOnInfo("Fizzle"))) then return end
 
 local hook
 local slots = {
-	"Head",
-	"Neck",
-	"Shoulder",
-	"Shirt",
-	"Chest",
-	"Waist",
-	"Legs",
-	"Feet",
-	"Wrist",
-	"Hands",
-	"Finger0",
-	"Finger1",
-	"Trinket0",
-	"Trinket1",
-	"Back",
-	"MainHand",
-	"SecondaryHand",
-	"Ranged",
-	"Tabard",
-	'Ammo',
+	"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
+	"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
+	"SecondaryHand", "Ranged", "Tabard", 'Ammo',
 }
 
 local update = function(self)
@@ -54,6 +41,10 @@ end
 
 local disable = function(self)
 	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+
+	for key, slotName in ipairs(slots) do
+		oGlow:CallFilters('char', _G['Character' .. slotName .. 'Slot'])
+	end
 end
 
 oGlow:RegisterPipe('char', enable, disable, update, 'Blizzard Character Frame', nil)
