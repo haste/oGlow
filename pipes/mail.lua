@@ -1,3 +1,7 @@
+-- TODO:
+--  - Possibly clean-up the dupe code.
+--  - Write a description.
+
 local hook
 local stack = {}
 
@@ -66,6 +70,14 @@ local disable = function(self)
 	self:UnregisterEvent('MAIL_SHOW', send)
 	self:UnregisterEvent('MAIL_SEND_INFO_UPDATE', send)
 	self:UnregisterEvent('MAIL_SEND_SUCCESS', send)
+
+	for i=1, INBOXITEMS_TO_DISPLAY do
+		oGlow:CallFilters('mail', _G["MailItem"..i.."Button"])
+	end
+
+	for i=1, ATTACHMENTS_MAX_RECEIVE do
+		oGlow:CallFilters('mail', _G["OpenMailAttachmentButton"..i])
+	end
 end
 
 local update = function(self)
