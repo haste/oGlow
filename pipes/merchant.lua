@@ -1,5 +1,8 @@
-local hook
+-- TODO:
+--  - Clean up the dupe code.
+--  - Write a description.
 
+local hook
 local update = function()
 	if(MerchantFrame:IsShown() and oGlow:IsPipeEnabled'merchant') then
 		if(MerchantFrame.selectedTab == 1) then
@@ -31,4 +34,12 @@ local enable = function(self)
 	end
 end
 
-oGlow:RegisterPipe('merchant', enable, nil, update, 'Blizzard Vendor Frame', nil)
+local disable = function(self)
+	for i=1, MERCHANT_ITEMS_PER_PAGE do
+		oGlow:CallFilters('merchant', _G['MerchantItem' .. i .. 'ItemButton'])
+	end
+
+	oGlow:CallFilters('merchant', MerchantBuyBackItemItemButton)
+end
+
+oGlow:RegisterPipe('merchant', enable, disable, update, 'Blizzard Vendor Frame', nil)
