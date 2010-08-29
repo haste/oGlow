@@ -5,6 +5,7 @@
 ## Notes: Make your shiny items... glow in the dark!
 
 oglow.lua
+ui.lua
 
 pipes\bags.lua
 pipes\char.lua
