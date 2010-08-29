@@ -31,6 +31,11 @@ local disable = function(self)
 	self:UnregisterEvent('TRADE_SHOW', update)
 	self:UnregisterEvent("TRADE_PLAYER_ITEM_CHANGED", player)
 	self:UnregisterEvent("TRADE_TARGET_ITEM_CHANGED", target)
+
+	for i=1, MAX_TRADE_ITEMS or 8 do
+		self:CallFilters('trade', _G["TradePlayerItem"..i.."ItemButton"])
+		self:CallFilters('trade', _G["TradeRecipientItem"..i.."ItemButton"])
+	end
 end
 
 oGlow:RegisterPipe('trade', enable, disable, update, 'Blizzard Trade Frame', nil)
