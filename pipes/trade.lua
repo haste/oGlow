@@ -13,7 +13,7 @@ local target = function(self, event, index)
 end
 
 local update = function(self)
-	for i=1,7 do
+	for i=1, MAX_TRADE_ITEMS or 8 do
 		player(self, nil, i)
 		target(self, nil, i)
 	end
