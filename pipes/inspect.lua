@@ -1,28 +1,15 @@
+-- TODO:
+--  - Clean up the dupe code.
+--  - Write a description.
 -- we might want to merge this with char.lua...
 
 if(select(4, GetAddOnInfo("Fizzle"))) then return end
 
 local hook
 local slots = {
-	"Head",
-	"Neck",
-	"Shoulder",
-	"Shirt",
-	"Chest",
-	"Waist",
-	"Legs",
-	"Feet",
-	"Wrist",
-	"Hands",
-	"Finger0",
-	"Finger1",
-	"Trinket0",
-	"Trinket1",
-	"Back",
-	"MainHand",
-	"SecondaryHand",
-	"Ranged",
-	"Tabard",
+	"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
+	"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
+	"SecondaryHand", "Ranged", "Tabard",
 }
 
 local update = function(self)
@@ -73,6 +60,10 @@ local disable = function(self)
 	self:UnregisterEvent('ADDON_LOADED', ADDON_LOADED)
 	self:UnregisterEvent('PLAYER_TARGET_CHANGED', update)
 	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+
+	for i, slotName in next, slots do
+		oGlow:CallFilters('inspect', _G["Inspect"..slotName.."Slot"])
+	end
 end
 
 oGlow:RegisterPipe('inspect', enable, disable, update, 'Blizzard Inspect Frame', nil)
