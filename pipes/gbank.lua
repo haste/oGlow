@@ -5,7 +5,7 @@ local update = function(self)
 	if(not IsAddOnLoaded"Blizzard_GuildBankUI") then return end
 
 	local tab = GetCurrentGuildBankTab()
-	for i=1, 98 do
+	for i=1, MAX_GUILDBANK_SLOTS_PER_TAB or 98 do
 		local index = math.fmod(i, 14)
 		if(index == 0) then
 			index = 14
