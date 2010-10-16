@@ -3,7 +3,6 @@
 --  - Write a description.
 
 if(select(4, GetAddOnInfo("Fizzle"))) then return end
-local CC = select(4, GetBuildInfo()) == 4e4
 
 local hook
 local slots = {
@@ -11,10 +10,6 @@ local slots = {
 	"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
 	"SecondaryHand", "Ranged", "Tabard",
 }
-
-if(not CC) then
-	table.insert(slots, 'Ammo')
-end
 
 local update = function(self)
 	if(CharacterFrame:IsShown() and oGlow:IsPipeEnabled'char') then
