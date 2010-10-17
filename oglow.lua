@@ -255,20 +255,15 @@ function oGlow:RegisterFilterOnPipe(pipe, filter)
 	end
 end
 
-do
-	local t
-	local iter = coroutine.wrap(function()
+oGlow.IterateFiltersOnPipe = function(pipe)
+	local t = activeFilters[pipe]
+	return coroutine.wrap(function()
 		for _, sub in next, t do
 			for k, v in next, sub do
 				coroutine.yield(v[3], v[1], v[4])
 			end
 		end
 	end)
-
-	oGlow.IterateFiltersOnPipe = function(pipe)
-		t = activeFilters[pipe]
-		return iter
-	end
 end
 
 function oGlow:UnregisterFilterOnPipe(pipe, filter)
