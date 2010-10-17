@@ -1,22 +1,46 @@
-local backdrop = {
-	bgFile = [[Interface\ChatFrame\ChatFrameBackground]], tile = true, tileSize = 16,
-	edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]], edgeSize = 16,
-	insets = {left = 4, right = 4, top = 4, bottom = 4},
-}
-
 local frame = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
 frame.name = 'oGlow'
 frame:Hide()
 
 frame:SetScript('OnShow', function(self)
-	local title = self:CreateFontString(nil, 'ARTWORK', 'GameFontNormalLarge')
+	self:CreateOptions()
+	self:SetScript('OnShow', nil)
+end)
+
+local _BACKDROP = {
+	bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
+	edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
+	tile = true, tileSize = 8, edgeSize = 16,
+	insets = {left = 2, right = 2, top = 2, bottom = 2}
+}
+
+local createFontString = function(parent, template)
+	local label = parent:CreateFontString(nil, nil, template or 'GameFontHighlight')
+	label:SetJustifyH'LEFT'
+
+	return label
+end
+
+local createCheckBox = function(parent)
+	local check = CreateFrame('CheckButton', nil, parent)
+	check:SetSize(16, 16)
+
+	check:SetNormalTexture[[Interface\Buttons\UI-CheckBox-Up]]
+	check:SetPushedTexture[[Interface\Buttons\UI-CheckBox-Down]]
+	check:SetHighlightTexture[[Interface\Buttons\UI-CheckBox-Highlight]]
+	check:SetCheckedTexture[[Interface\Buttons\UI-CheckBox-Check]]
+
+	return check
+end
+
+function frame:CreateOptions()
+	local title = createFontString(self, 'GameFontNormalLarge')
 	title:SetPoint('TOPLEFT', 16, -16)
 	title:SetText'oGlow - Not tested on animals!'
 
-	local subtitle = self:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
+	local subtitle = createFontString(self)
 	subtitle:SetPoint('TOPLEFT', title, 'BOTTOMLEFT', 0, -8)
 	subtitle:SetPoint('RIGHT', self, -32, 0)
-	subtitle:SetNonSpaceWrap(true)
 	subtitle:SetJustifyH'LEFT'
 	-- Might be useful later~
 	--subtitle:SetText('Configurations are awesome!')
@@ -26,22 +50,28 @@ frame:SetScript('OnShow', function(self)
 	scroll:SetPoint("BOTTOMRIGHT", 0, 4)
 
 	local scrollchild = CreateFrame("Frame", nil, self)
+	scrollchild.rows = {}
 	scrollchild:SetPoint"LEFT"
 	scrollchild:SetHeight(scroll:GetHeight())
-	scrollchild:SetWidth(scroll:GetWidth())
+	-- So we have correct spacing on the right side.
+	scrollchild:SetWidth(scroll:GetWidth() -16)
+	self.scrollchild = scrollchild
+
+	local filterFrame = CreateFrame('Frame', nil, self)
+	filterFrame.rows = {}
+	self.filterFrame = filterFrame
 
 	scroll:SetScrollChild(scrollchild)
 	scroll:UpdateScrollChildRect()
 	scroll:EnableMouseWheel(true)
 
-	local _BACKDROP = {
-		bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
-		edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
-		tile = true, tileSize = 8, edgeSize = 16,
-		insets = {left = 2, right = 2, top = 2, bottom = 2}
-	}
+	scroll.value = 0
+	scroll:SetVerticalScroll(0)
+	scrollchild:SetPoint('TOP', 0, 0)
+end
 
-	local check_OnClick = function(self)
+do
+	local CheckBox_OnClick = function(self)
 		local pipe = self:GetParent().pipe
 		if(self:GetChecked()) then
 			oGlow:EnablePipe(pipe)
@@ -52,121 +82,189 @@ frame:SetScript('OnShow', function(self)
 		oGlow:UpdatePipe(pipe)
 	end
 
-	local slider = CreateFrame("Slider", nil, scroll)
-	local rows = {}
-	local i = 1
-	for pipe, active, name, desc in oGlow.IteratePipes() do
-		local row = CreateFrame('Button', nil, scrollchild)
+	local Filter_OnClick = function(self)
+		local pipe = self:GetParent().pipe
+		if(self:GetChecked()) then
+			oGlow:RegisterFilterOnPipe(pipe, self.name)
+		else
+			oGlow:UnregisterFilterOnPipe(pipe, self.name)
+		end
+
+		oGlow:UpdatePipe(pipe)
+	end
+
+	local Row_OnClick = function(self)
+		self.owner.active = self
+
+		local filterFrame = self.owner.filterFrame
+		filterFrame.pipe = self.pipe
+
+		filterFrame:Show()
+		filterFrame:SetParent(self)
+
+		filterFrame:ClearAllPoints()
+		filterFrame:SetPoint('TOP', self.check, 'BOTTOM')
+		filterFrame:SetPoint('LEFT', 16, 0)
+		filterFrame:SetPoint('RIGHT', -16, 0)
+
+		self:SetHeight(filterFrame:GetHeight())
+
+		for name, type, desc in oGlow.IterateFiltersOnPipe(self.pipe) do
+			for i=1, #filterFrame do
+				local filter = filterFrame[i]
+				filter:SetChecked(filter.name == name)
+			end
+		end
+
+		do
+			local rows = self.owner.scrollchild.rows
+			local n = 1
+			local row = rows[n]
+			while(row) do
+				if(row ~= self.owner.active) then
+					row:SetBackdropBorderColor(.3, .3, .3)
+					row:SetHeight(24)
+				end
+
+				n = n + 1
+				row = rows[n]
+			end
+		end
+	end
+
+	local Row_OnEnter = function(self)
+		self:SetBackdropBorderColor(.5, .9, .06)
+
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+		GameTooltip:SetText"Click for additional settings."
+	end
+
+	local Row_OnLeave = function(self)
+		if(self ~= self.owner.active) then
+			self:SetBackdropBorderColor(.3, .3, .3)
+		end
+
+		GameTooltip_Hide()
+	end
+
+	local createRow = function(parent, i)
+		local row = CreateFrame('Button', nil, parent)
 
 		row:SetBackdrop(_BACKDROP)
-		row:SetBackdropBorderColor(.3, .3, .3)
 		row:SetBackdropColor(.1, .1, .1, .5)
+		row:SetBackdropBorderColor(.3, .3, .3)
 
 		if(i == 1) then
 			row:SetPoint('TOP', 0, -8)
 		else
-			row:SetPoint('TOP', rows[i-1], 'BOTTOM')
+			row:SetPoint('TOP', parent.rows[i - 1], 'BOTTOM')
 		end
 
 		row:SetPoint('LEFT', 6, 0)
-		-- leave some space for the scrollbar.
-		row:SetPoint('RIGHT', -30, 0)
+		row:SetPoint('RIGHT', -6, 0)
 		row:SetHeight(24)
 
-		local check = CreateFrame('CheckButton', nil, row)
-		check:SetSize(16, 16)
+		row:SetScript('OnEnter', Row_OnEnter)
+		row:SetScript('OnLeave', Row_OnLeave)
+		row:SetScript('OnClick', Row_OnClick)
+
+		local check = createCheckBox(row)
 		check:SetPoint('LEFT', 10, 0)
 		check:SetPoint('TOP', 0, -4)
-
-		check:SetNormalTexture[[Interface\Buttons\UI-CheckBox-Up]]
-		check:SetPushedTexture[[Interface\Buttons\UI-CheckBox-Down]]
-		check:SetHighlightTexture[[Interface\Buttons\UI-CheckBox-Highlight]]
-		check:SetCheckedTexture[[Interface\Buttons\UI-CheckBox-Check]]
-
-		check:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
-		check:SetChecked(active)
-
-		check:SetScript('OnClick', check_OnClick)
+		check:SetScript('OnClick', CheckBox_OnClick)
 		row.check = check
 
-		local label = row:CreateFontString(nil, nil, 'GameFontHighlight')
+		local label = createFontString(row)
 		label:SetPoint('LEFT', check, 'RIGHT', 5, -1)
-		label:SetJustifyH'LEFT'
-		label:SetText(name)
-		row.label = labela
+		row.label = label
 
-		row.pipe = pipe
-
-		rows[i] = row
-		i = i + 1
+		table.insert(parent.rows, row)
+		return row
 	end
-	self.rows = rows
 
-	slider:SetWidth(16)
+	function frame:refresh()
+		local sChild = self.scrollchild
+		local filterFrame = self.filterFrame
 
-	slider:SetPoint("TOPRIGHT", -8, -24)
-	slider:SetPoint("BOTTOMRIGHT", -8, 24)
+		-- XXX: Rewrite this to use oGlow:GetNumFilters()
+		local filters = {}
+		for name, type, desc in oGlow.IterateFilters() do
+			table.insert(filters, {name = name; type = type, desc = desc})
+		end
 
-	local up = CreateFrame("Button", nil, slider)
-	up:SetPoint("BOTTOM", slider, "TOP")
-	up:SetSize(16, 16)
-	up:SetNormalTexture[[Interface\Buttons\UI-ScrollBar-ScrollUpButton-Up]]
-	up:SetPushedTexture[[Interface\Buttons\UI-ScrollBar-ScrollUpButton-Down]]
-	up:SetDisabledTexture[[Interface\Buttons\UI-ScrollBar-ScrollUpButton-Disabled]]
-	up:SetHighlightTexture[[Interface\Buttons\UI-ScrollBar-ScrollUpButton-Highlight]]
+		local numFilters = #filters
+		local split = 2
+		if(numFilters > 1) then
+			-- You know.. after writing this.. I considered that I could just forget
+			-- about how the items had been ordered, and just do:
+			-- Item 1 <space> Item 2
+			-- Item 3 <space> [...]
+			--
+			-- But no! I had to do it like this... Ironically the filter order is...
+			-- UNDEFINED :D
+			--
+			-- Yes I almost fell of my chair when I discovered that :3 I'll just leave
+			-- this here as an reminder of the torment that was figuring out an integer
+			-- sequence that would satisfy my OCD.
+			--
+			-- Hopefully I'll get use for this later in some obscure scenario!
+			split = math.floor(numFilters / 2) + (numFilters % 2) + 1
+		end
 
-	up:GetNormalTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
-	up:GetPushedTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
-	up:GetDisabledTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
-	up:GetHighlightTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
-	up:GetHighlightTexture():SetBlendMode("ADD")
+		for i=1, numFilters do
+			local filter = filters[i]
+			local check = filterFrame[i]
+			if(not check) then
+				check = createCheckBox(filterFrame)
+				filterFrame[i] = check
+			end
 
-	up:SetScript("OnClick", function(self)
-		local box = self:GetParent()
-		box:SetValue(box:GetValue() - box:GetHeight()/2)
-		PlaySound("UChatScrollButton")
-	end)
+			check:ClearAllPoints()
+			if(i == 1) then
+				check:SetPoint('TOPLEFT', 16, -2)
+			elseif(i == split) then
+				check:SetPoint('TOP', 16, -2)
+			else
+				check:SetPoint('TOP', filterFrame[i - 1], 'BOTTOM')
+			end
 
-	local down = CreateFrame("Button", nil, slider)
-	down:SetPoint("TOP", slider, "BOTTOM")
-	down:SetSize(16, 16)
-	down:SetNormalTexture[[Interface\Buttons\UI-ScrollBar-ScrollDownButton-Up]]
-	down:SetPushedTexture[[Interface\Buttons\UI-ScrollBar-ScrollDownButton-Down]]
-	down:SetDisabledTexture[[Interface\Buttons\UI-ScrollBar-ScrollDownButton-Disabled]]
-	down:SetHighlightTexture[[Interface\Buttons\UI-ScrollBar-ScrollDownButton-Highlight]]
+			check:SetScript('OnClick', Filter_OnClick)
 
-	down:GetNormalTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
-	down:GetPushedTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
-	down:GetDisabledTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
-	down:GetHighlightTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
-	down:GetHighlightTexture():SetBlendMode("ADD")
+			local label = check.label
+			if(not label) then
+				label =  createFontString(check)
+				label:SetPoint('LEFT', check, 'RIGHT', 5, -1)
+				check.label = label
+			end
+			label:SetText(filter.name)
 
-	down:SetScript("OnClick", function(self)
-		local box = self:GetParent()
-		box:SetValue(box:GetValue() + box:GetHeight()/2)
-		PlaySound("UChatScrollButton")
-	end)
+			check.name = filter.name
+			check.desc = filter.desc
+			check.type = filter.type
+			filterFrame[i] = check
+		end
 
-	slider:SetThumbTexture[[Interface\Buttons\UI-ScrollBar-Knob]]
-	local thumb = slider:GetThumbTexture()
-	thumb:SetSize(16, 24)
-	thumb:SetTexCoord(1/4, 3/4, 1/8, 7/8)
+		-- We set split to 2 above (which makes this work correctly for
+		-- numFilters == 1.
+		filterFrame:SetHeight(((split-1) * 16) + 28)
+		filterFrame:Hide()
 
-	slider:SetScript("OnValueChanged", function(self, val, ...)
-		local min, max = self:GetMinMaxValues()
-		if(val == min) then up:Disable() else up:Enable() end
-		if(val == max) then down:Disable() else down:Enable() end
+		local n = 1
+		for pipe, active, name, desc in oGlow.IteratePipes() do
+			local row = sChild.rows[n] or createRow(sChild, n)
 
-		scroll.value = val
-		scroll:SetVerticalScroll(val)
-		scrollchild:SetPoint('TOP', 0, val)
-	end)
+			row:SetBackdropBorderColor(.3, .3, .3)
+			row:SetHeight(24)
 
-	slider:SetMinMaxValues(0,550)
-	slider:SetValue(0)
+			row.owner = self
+			row.pipe = pipe
+			row.check:SetChecked(active)
+			row.label:SetText(name)
 
-	self:SetScript('OnShow', nil)
-end)
+			n = n + 1
+		end
+	end
+end
 
 InterfaceOptions_AddCategory(frame)
 
