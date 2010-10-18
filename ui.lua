@@ -109,9 +109,10 @@ do
 
 		self:SetHeight(filterFrame:GetHeight())
 
-		for name, type, desc in oGlow.IterateFiltersOnPipe(self.pipe) do
-			for i=1, #filterFrame do
-				local filter = filterFrame[i]
+		for i=1, #filterFrame do
+			local filter = filterFrame[i]
+			filter:SetChecked(nil)
+			for name, type, desc in oGlow.IterateFiltersOnPipe(self.pipe) do
 				filter:SetChecked(filter.name == name)
 			end
 		end
