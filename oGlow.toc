@@ -3,6 +3,7 @@
 ## Author: Haste
 ## X-eMail: troeks@gmail.com
 ## Notes: Make your shiny items... glow in the dark!
+## SavedVariables: oGlowDB
 
 oglow.lua
 ui.lua
