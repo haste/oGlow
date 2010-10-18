@@ -36,7 +36,7 @@ end
 function frame:CreateOptions()
 	local title = createFontString(self, 'GameFontNormalLarge')
 	title:SetPoint('TOPLEFT', 16, -16)
-	title:SetText'oGlow - Not tested on animals!'
+	title:SetText'oGlow - Now with 30% less toxic radiation!'
 
 	local subtitle = createFontString(self)
 	subtitle:SetPoint('TOPLEFT', title, 'BOTTOMLEFT', 0, -8)
