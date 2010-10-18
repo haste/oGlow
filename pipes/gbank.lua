@@ -32,6 +32,8 @@ local disable = function(self)
 	self:UnregisterEvent('GUILDBANKBAGSLOTS_CHANGED', update)
 	self:UnregisterEvent('GUILDBANKFRAME_OPENED', update)
 
+	if(not IsAddOnLoaded'Blizzard_GuildBankUI') then return end
+
 	for i=1, MAX_GUILDBANK_SLOTS_PER_TAB or 98 do
 		local index = math.fmod(i, 14)
 		if(index == 0) then
