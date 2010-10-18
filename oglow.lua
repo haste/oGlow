@@ -34,15 +34,32 @@ local event_metatable = {
 
 local oGlow = CreateFrame('Frame', 'oGlow')
 
--- This is a temporary solution. Right now we just want to enable all pipes and
--- filters.
 function oGlow:ADDON_LOADED(event, addon)
 	if(addon == 'oGlow') then
-		for pipe in next, pipesTable do
-			self:EnablePipe(pipe)
+		if(not oGlowDB) then
+			oGlowDB = {
+				version = 0,
+				EnabledPipes = {},
+				EnabledFilters = {},
+			}
 
-			for filter in next, filtersTable do
-				self:RegisterFilterOnPipe(pipe, filter)
+			for pipe in next, pipesTable do
+				self:EnablePipe(pipe)
+
+				for filter in next, filtersTable do
+					self:RegisterFilterOnPipe(pipe, filter)
+				end
+			end
+		else
+			for pipe in next, oGlowDB.EnabledPipes do
+				self:EnablePipe(pipe)
+
+				for filter, enabledPipes in next, oGlowDB.EnabledFilters do
+					if(enabledPipes[pipe]) then
+						self:RegisterFilterOnPipe(pipe, filter)
+						break
+					end
+				end
 			end
 		end
 
@@ -161,6 +178,8 @@ function oGlow:EnablePipe(pipe)
 		ref.enable(self)
 		ref.isActive = true
 
+		oGlowDB.EnabledPipes[pipe] = true
+
 		return true
 	end
 end
@@ -172,6 +191,8 @@ function oGlow:DisablePipe(pipe)
 	if(ref and ref.isActive) then
 		if(ref.disable) then ref.disable(self) end
 		ref.isActive = nil
+
+		oGlowDB.EnabledPipes[pipe] = nil
 
 		return true
 	end
@@ -234,6 +255,8 @@ function oGlow:RegisterFilterOnPipe(pipe, filter)
 
 	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
 	if(not filtersTable[filter]) then return nil, 'Filter does not exist.' end
+
+	-- XXX: Clean up this logic.
 	if(not activeFilters[pipe]) then
 		local filterTable = filtersTable[filter]
 		local display = filterTable[1]
@@ -249,18 +272,25 @@ function oGlow:RegisterFilterOnPipe(pipe, filter)
 				return nil, 'Filter function is already registered.'
 			end
 		end
-
 		table.insert(ref, filterTable)
-		return true
 	end
+
+	if(not oGlowDB.EnabledFilters[filter]) then
+		oGlowDB.EnabledFilters[filter] = {}
+	end
+	oGlowDB.EnabledFilters[filter][pipe] = true
+
+	return true
 end
 
 oGlow.IterateFiltersOnPipe = function(pipe)
 	local t = activeFilters[pipe]
 	return coroutine.wrap(function()
-		for _, sub in next, t do
-			for k, v in next, sub do
-				coroutine.yield(v[3], v[1], v[4])
+		if(t) then
+			for _, sub in next, t do
+				for k, v in next, sub do
+					coroutine.yield(v[3], v[1], v[4])
+				end
 			end
 		end
 	end)
@@ -273,12 +303,15 @@ function oGlow:UnregisterFilterOnPipe(pipe, filter)
 	if(not pipesTable[pipe]) then return nil, 'Pipe does not exist.' end
 	if(not filtersTable[filter]) then return nil, 'Filter does not exist.' end
 
+	--- XXX: Be more defensive here.
 	local filterTable = filtersTable[filter]
 	local ref = activeFilters[pipe][filterTable[1]]
 	if(ref) then
 		for k, func in next, ref do
 			if(func == filterTable) then
 				table.remove(ref, k)
+				oGlowDB.EnabledFilters[filter][pipe] = nil
+
 				return true
 			end
 		end
