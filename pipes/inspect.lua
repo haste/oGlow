@@ -13,7 +13,7 @@ local slots = {
 }
 
 local update = function(self)
-	if(not InspectFrame:IsShown() or not oGlow:IsPipeEnabled'inspect') then return end
+	if(not InspectFrame or not InspectFrame:IsShown() or not oGlow:IsPipeEnabled'inspect') then return end
 
 	local unit = InspectFrame.unit
 	for i, slotName in next, slots do
@@ -60,6 +60,8 @@ local disable = function(self)
 	self:UnregisterEvent('ADDON_LOADED', ADDON_LOADED)
 	self:UnregisterEvent('PLAYER_TARGET_CHANGED', update)
 	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+
+	if(not InspectFrame) then return end
 
 	for i, slotName in next, slots do
 		oGlow:CallFilters('inspect', _G["Inspect"..slotName.."Slot"])
