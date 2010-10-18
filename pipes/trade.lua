@@ -38,4 +38,4 @@ local disable = function(self)
 	end
 end
 
-oGlow:RegisterPipe('trade', enable, disable, update, 'Blizzard Trade Frame', nil)
+oGlow:RegisterPipe('trade', enable, disable, update, 'Trade frame', nil)

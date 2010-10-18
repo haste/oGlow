@@ -59,4 +59,4 @@ local disable = function(self)
 	end
 end
 
-oGlow:RegisterPipe('tradeskill', enable, disable, update, 'Blizzard Tradeskill Frame', nil)
+oGlow:RegisterPipe('tradeskill', enable, disable, update, 'Profession frame', nil)

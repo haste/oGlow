@@ -27,4 +27,4 @@ local disable = function(self)
 	end
 end
 
-oGlow:RegisterPipe('bank', enable, disable, update, 'Blizzard Player Bank Frame', nil)
+oGlow:RegisterPipe('bank', enable, disable, update, 'Player bank frame', nil)

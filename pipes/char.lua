@@ -47,4 +47,4 @@ local disable = function(self)
 	end
 end
 
-oGlow:RegisterPipe('char', enable, disable, update, 'Blizzard Character Frame', nil)
+oGlow:RegisterPipe('char', enable, disable, update, 'Character frame', nil)

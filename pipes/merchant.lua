@@ -42,4 +42,4 @@ local disable = function(self)
 	oGlow:CallFilters('merchant', MerchantBuyBackItemItemButton)
 end
 
-oGlow:RegisterPipe('merchant', enable, disable, update, 'Blizzard Vendor Frame', nil)
+oGlow:RegisterPipe('merchant', enable, disable, update, 'Vendor frame', nil)

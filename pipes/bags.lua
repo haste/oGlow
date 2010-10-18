@@ -53,4 +53,4 @@ local disable = function(self)
 	end
 end
 
-oGlow:RegisterPipe('bags', enable, disable, update, 'Blizzard Bag Frames', nil)
+oGlow:RegisterPipe('bags', enable, disable, update, 'Bag containers', nil)

@@ -68,4 +68,4 @@ local disable = function(self)
 	end
 end
 
-oGlow:RegisterPipe('inspect', enable, disable, update, 'Blizzard Inspect Frame', nil)
+oGlow:RegisterPipe('inspect', enable, disable, update, 'Inspect frame', nil)
