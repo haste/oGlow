@@ -16,7 +16,6 @@ pipes\bank.lua
 pipes\gbank.lua
 pipes\trade.lua
 pipes\tradeskill.lua
-pipes\craft.lua
 pipes\merchant.lua
 pipes\mail.lua
 pipes\char-flyout.lua
@@ -24,4 +23,3 @@ pipes\char-flyout.lua
 displays\border.lua
 
 filters\quality.lua
-filters\quest.lua
