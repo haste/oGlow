@@ -36,14 +36,13 @@ end
 function frame:CreateOptions()
 	local title = createFontString(self, 'GameFontNormalLarge')
 	title:SetPoint('TOPLEFT', 16, -16)
-	title:SetText'oGlow - Now with 30% less toxic radiation!'
+	title:SetText'oGlow'
 
 	local subtitle = createFontString(self)
 	subtitle:SetPoint('TOPLEFT', title, 'BOTTOMLEFT', 0, -8)
 	subtitle:SetPoint('RIGHT', self, -32, 0)
 	subtitle:SetJustifyH'LEFT'
-	-- Might be useful later~
-	--subtitle:SetText('Configurations are awesome!')
+	subtitle:SetText'Now with 30% less toxic radiation!'
 
 	local scroll = CreateFrame("ScrollFrame", nil, self)
 	scroll:SetPoint('TOPLEFT', subtitle, 'BOTTOMLEFT', 0, -8)
