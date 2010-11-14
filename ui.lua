@@ -67,6 +67,8 @@ function frame:CreateOptions()
 	scroll.value = 0
 	scroll:SetVerticalScroll(0)
 	scrollchild:SetPoint('TOP', 0, 0)
+
+	self:refresh()
 end
 
 do
