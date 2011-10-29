@@ -48,6 +48,12 @@ function frame:CreateOptions()
 		local DropDown_OnClick = function(self)
 			oGlowDB.FilterSettings.quality = self.value - 1
 			oGlow:CallOptionCallbacks()
+
+			for pipe, active, name, desc in oGlow.IteratePipes() do
+				if(active) then
+					oGlow:UpdatePipe(pipe)
+				end
+			end
 			UIDropDownMenu_SetSelectedID(self:GetParent().dropdown, self:GetID())
 		end
 
