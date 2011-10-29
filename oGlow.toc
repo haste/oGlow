@@ -10,6 +10,7 @@ init.lua
 event.lua
 pipe.lua
 filter.lua
+display.lua
 oglow.lua
 ui.lua
 

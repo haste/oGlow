@@ -10,7 +10,7 @@ local error = function(...) print("|cffff0000Error:|r "..string.format(...)) end
 
 local pipesTable = ns.pipesTable
 local filtersTable = ns.filtersTable
-local displaysTable = {}
+local displaysTable = ns.displaysTable
 
 local numFilters = 0
 
@@ -53,15 +53,6 @@ local ADDON_LOADED = function(self, event, addon)
 			end
 		end
 	end
-end
-
---[[ Display API ]]
-
-function oGlow:RegisterDisplay(name, display)
-	argcheck(name, 2, 'string')
-	argcheck(display, 3, 'function')
-
-	displaysTable[name] = display
 end
 
 --[[ General API ]]
