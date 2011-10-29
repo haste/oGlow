@@ -11,6 +11,7 @@ event.lua
 pipe.lua
 filter.lua
 display.lua
+colors.lua
 oglow.lua
 ui.lua
 
