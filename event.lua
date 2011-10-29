@@ -66,7 +66,7 @@ function oGlow:UnregisterEvent(event, func)
 					local _, handler = next(curev)
 					self[event] = handler
 				elseif(n == 0) then
-					eventFrame:UnregisterEvent(self, event)
+					eventFrame:UnregisterEvent(event)
 				end
 
 				break
@@ -74,6 +74,6 @@ function oGlow:UnregisterEvent(event, func)
 		end
 	elseif(curev == func) then
 		self[event] = nil
-		eventFrame:UnregisterEvent(self, event)
+		eventFrame:UnregisterEvent(event)
 	end
 end
