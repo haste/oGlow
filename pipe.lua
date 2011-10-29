@@ -95,4 +95,3 @@ function oGlow:GetNumPipes()
 end
 
 ns.pipesTable = pipesTable
-ns.numPipes = numPipes
