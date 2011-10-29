@@ -6,6 +6,8 @@
 ## X-eMail: troeks@gmail.com
 ## Notes: Make your shiny items... glow in the dark!
 
+init.lua
+event.lua
 oglow.lua
 ui.lua
 
