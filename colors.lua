@@ -25,12 +25,7 @@ function oGlow:RegisterColor(name, r, g, b)
 	argcheck(g, 4, 'number')
 	argcheck(b, 5, 'number')
 
-	-- Silently fail.
-	if(rawget(colorTable, name)) then
-		return nil, string.format('Color [%s] is already registered.', name)
-	else
-		rawset(colorTable, name, {r, g, b})
-	end
+	rawset(colorTable, name, {r, g, b})
 
 	return true
 end
