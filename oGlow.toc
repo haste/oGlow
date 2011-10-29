@@ -9,6 +9,7 @@
 init.lua
 event.lua
 pipe.lua
+filter.lua
 oglow.lua
 ui.lua
 
