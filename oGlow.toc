@@ -8,6 +8,7 @@
 
 init.lua
 event.lua
+pipe.lua
 oglow.lua
 ui.lua
 
