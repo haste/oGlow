@@ -16,14 +16,6 @@ local numFilters = 0
 
 local activeFilters = ns.activeFilters
 
-local event_metatable = {
-	__call = function(funcs, self, ...)
-		for _, func in pairs(funcs) do
-			func(self, ...)
-		end
-	end,
-}
-
 local ADDON_LOADED = function(self, event, addon)
 	if(addon == 'oGlow') then
 		if(not oGlowDB) then
