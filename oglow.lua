@@ -14,15 +14,34 @@ local displaysTable = ns.displaysTable
 
 local numFilters = 0
 
+local optionCallbacks = {}
 local activeFilters = ns.activeFilters
+
+local upgradePath = {
+	[0] = function(db)
+		db.FilterSettings = {}
+		db.version = 1
+	end
+}
+
+local upgradeDB = function(db)
+	local version = db.versio
+	if(upgradePath[version]) then
+		repeat
+			upgradePath[version](db)
+			version = version + 1
+		until not upgradePath[version]
+	end
+end
 
 local ADDON_LOADED = function(self, event, addon)
 	if(addon == 'oGlow') then
 		if(not oGlowDB) then
 			oGlowDB = {
-				version = 0,
+				version = 1,
 				EnabledPipes = {},
 				EnabledFilters = {},
+				FilterSettings = {},
 			}
 
 			for pipe in next, pipesTable do
@@ -33,6 +52,7 @@ local ADDON_LOADED = function(self, event, addon)
 				end
 			end
 		else
+			upgradeDB(oGlowDB)
 			for pipe in next, oGlowDB.EnabledPipes do
 				self:EnablePipe(pipe)
 
@@ -44,6 +64,8 @@ local ADDON_LOADED = function(self, event, addon)
 				end
 			end
 		end
+
+		self:CallOptionCallbacks()
 	end
 end
 
@@ -67,6 +89,18 @@ function oGlow:CallFilters(pipe, frame, ...)
 				if(displaysTable[display](frame, func(...))) then break end
 			end
 		end
+	end
+end
+
+function oGlow:RegisterOptionCallback(func)
+	argcheck(func, 2, 'function')
+
+	table.insert(optionCallbacks, func)
+end
+
+function oGlow:CallOptionCallbacks()
+	for _, func in next, optionCallbacks do
+		func(oGlowDB)
 	end
 end
 
