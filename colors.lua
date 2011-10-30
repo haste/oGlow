@@ -25,7 +25,12 @@ function oGlow:RegisterColor(name, r, g, b)
 	argcheck(g, 4, 'number')
 	argcheck(b, 5, 'number')
 
-	rawset(colorTable, name, {r, g, b})
+	local color = rawget(colorTable, name)
+	if(color) then
+		color[1], color[2], color[3] = r, g, b
+	else
+		rawset(colorTable, name, {r, g, b})
+	end
 
 	return true
 end
