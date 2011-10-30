@@ -15,7 +15,7 @@ colors.lua
 oglow.lua
 
 ui\helpers.lua
-ui.lua
+ui\pipes.lua
 ui\quality.lua
 
 pipes\bags.lua
