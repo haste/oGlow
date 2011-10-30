@@ -26,7 +26,7 @@ local upgradePath = {
 }
 
 local upgradeDB = function(db)
-	local version = db.versio
+	local version = db.version
 	if(upgradePath[version]) then
 		repeat
 			upgradePath[version](db)
