@@ -38,4 +38,13 @@ function oGlow:RegisterColor(name, r, g, b)
 	return true
 end
 
+function oGlow:ResetColor(name)
+	argcheck(name, 2, 'string', 'number')
+
+	oGlowDB.Colors[name] = nil
+	colorTable[name] = nil
+
+	return unpack(colorTable[name])
+end
+
 ns.colorTable = colorTable
