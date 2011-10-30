@@ -20,6 +20,7 @@ local activeFilters = ns.activeFilters
 local upgradePath = {
 	[0] = function(db)
 		db.FilterSettings = {}
+		db.Colors = {}
 		db.version = 1
 	end
 }
@@ -41,7 +42,9 @@ local ADDON_LOADED = function(self, event, addon)
 				version = 1,
 				EnabledPipes = {},
 				EnabledFilters = {},
+
 				FilterSettings = {},
+				Colors = {},
 			}
 
 			for pipe in next, pipesTable do
@@ -53,6 +56,11 @@ local ADDON_LOADED = function(self, event, addon)
 			end
 		else
 			upgradeDB(oGlowDB)
+
+			for name, color in next, oGlowDB.Colors do
+				oGlow:RegisterColor(name, unpack(color))
+			end
+
 			for pipe in next, oGlowDB.EnabledPipes do
 				self:EnablePipe(pipe)
 

@@ -29,8 +29,11 @@ function oGlow:RegisterColor(name, r, g, b)
 	if(color) then
 		color[1], color[2], color[3] = r, g, b
 	else
-		rawset(colorTable, name, {r, g, b})
+		color = {r, g, b}
+		rawset(colorTable, name, color)
 	end
+
+	oGlowDB.Colors[name] = color
 
 	return true
 end
