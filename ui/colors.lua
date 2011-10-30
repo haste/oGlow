@@ -39,7 +39,7 @@ function frame:CreateOptions()
 	box.title = title
 
 	local bTitle = ns.createFontString(self)
-	bTitle:SetPoint('BOTTOMRIGHT', box, 'TOPRIGHT', -35, 0)
+	bTitle:SetPoint('BOTTOMRIGHT', box, 'TOPRIGHT', -35 - 16 - 5, 0)
 	bTitle:SetWidth(40)
 	bTitle:SetText'Blue'
 	bTitle:SetJustifyH'CENTER'
@@ -103,6 +103,22 @@ function frame:CreateOptions()
 		return true
 	end
 
+	local Reset_OnClick = function(self)
+		local row = self:GetParent()
+		Swatch_Update(row.swatch, nil, oGlow:ResetColor(row.id))
+
+		for pipe, active, name, desc in oGlow.IteratePipes() do
+			if(active) then
+				oGlow:UpdatePipe(pipe)
+			end
+		end
+	end
+
+	local Reset_OnEnter = function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:SetText(RESET)
+	end
+
 	local rows = {}
 	for i=0, 7 do
 		local row = CreateFrame('Button', nil, box)
@@ -120,8 +136,16 @@ function frame:CreateOptions()
 		row:SetPoint('RIGHT', -25, 0)
 		row:SetHeight(24)
 
+		local swatch = ns.createColorSwatch(row)
+		swatch:SetPoint('RIGHT', -10, 0)
+
+		swatch.swatchFunc = Swatch_Ok
+		swatch.cancelFunc = Swatch_Cancel
+
+		row.swatch = swatch
+
 		local blueLabel = ns.createEditBox(row)
-		blueLabel:SetPoint('RIGHT', -10, 0)
+		blueLabel:SetPoint('RIGHT', swatch, 'LEFT', -5, 0)
 		blueLabel:SetJustifyH'CENTER'
 
 		blueLabel:SetNumeric(true)
@@ -150,20 +174,25 @@ function frame:CreateOptions()
 
 		row.redLabel = redLabel
 
-		local swatch = ns.createColorSwatch(row)
-		swatch:SetPoint('LEFT', row, 'RIGHT', 2, 0)
-
-		swatch.swatchFunc = Swatch_Ok
-		swatch.cancelFunc = Swatch_Cancel
-
-		row.swatch = swatch
-
 		local nameLabel= ns.createFontString(row)
 		nameLabel:SetPoint('LEFT', 10, 0)
 		nameLabel:SetPoint('TOP', 0, -4)
 		nameLabel:SetPoint'BOTTOM'
 		nameLabel:SetJustifyH'LEFT'
 		row.nameLabel = nameLabel
+
+		local reset = CreateFrame("Button", nil, row)
+		reset:SetSize(16, 16)
+		reset:SetPoint('LEFT', row, 'RIGHT')
+
+		reset:SetNormalTexture[[Interface\Buttons\UI-Panel-MinimizeButton-Up]]
+		reset:SetPushedTexture[[Interface\Buttons\UI-Panel-MinimizeButton-Down]]
+		reset:SetHighlightTexture[[Interface\Buttons\UI-Panel-MinimizeButton-Highlight]]
+
+		reset:SetScript("OnClick", Reset_OnClick)
+		reset:SetScript("OnEnter", Reset_OnEnter)
+		reset:SetScript("OnLeave", GameTooltip_Hide)
+		row.reset = reset
 
 		row.id = i
 		rows[i] = row
