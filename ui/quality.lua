@@ -5,7 +5,7 @@ local colorTable = ns.colorTable
 
 local frame = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
 frame:Hide()
-frame.name = 'Quality'
+frame.name = 'Filter: Quality'
 frame.parent = 'oGlow'
 
 frame:SetScript('OnShow', function(self)
@@ -16,7 +16,7 @@ end)
 function frame:CreateOptions()
 	local title = ns.createFontString(self, 'GameFontNormalLarge')
 	title:SetPoint('TOPLEFT', 16, -16)
-	title:SetText'oGlow: Quality filter'
+	title:SetText'oGlow: Filter: Quality'
 
 	local thresLabel = ns.createFontString(self, 'GameFontNormalSmall')
 	thresLabel:SetPoint('TOPLEFT', title, 'BOTTOMLEFT', 0, -16)
