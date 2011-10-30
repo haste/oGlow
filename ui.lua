@@ -1,3 +1,6 @@
+local _, ns = ...
+local oGlow = ns.oGlow
+
 local frame = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
 frame.name = 'oGlow'
 frame:Hide()
@@ -14,13 +17,6 @@ local _BACKDROP = {
 	insets = {left = 2, right = 2, top = 2, bottom = 2}
 }
 
-local createFontString = function(parent, template)
-	local label = parent:CreateFontString(nil, nil, template or 'GameFontHighlight')
-	label:SetJustifyH'LEFT'
-
-	return label
-end
-
 local createCheckBox = function(parent)
 	local check = CreateFrame('CheckButton', nil, parent)
 	check:SetSize(16, 16)
@@ -34,11 +30,11 @@ local createCheckBox = function(parent)
 end
 
 function frame:CreateOptions()
-	local title = createFontString(self, 'GameFontNormalLarge')
+	local title = ns.createFontString(self, 'GameFontNormalLarge')
 	title:SetPoint('TOPLEFT', 16, -16)
 	title:SetText'oGlow'
 
-	local subtitle = createFontString(self)
+	local subtitle = ns.createFontString(self)
 	subtitle:SetPoint('TOPLEFT', title, 'BOTTOMLEFT', 0, -8)
 	subtitle:SetPoint('RIGHT', self, -32, 0)
 	subtitle:SetJustifyH'LEFT'
@@ -176,7 +172,7 @@ do
 		check:SetScript('OnClick', CheckBox_OnClick)
 		row.check = check
 
-		local label = createFontString(row)
+		local label = ns.createFontString(row)
 		label:SetPoint('LEFT', check, 'RIGHT', 5, -1)
 		row.label = label
 
@@ -234,7 +230,7 @@ do
 
 			local label = check.label
 			if(not label) then
-				label =  createFontString(check)
+				label =  ns.createFontString(check)
 				label:SetPoint('LEFT', check, 'RIGHT', 5, -1)
 				check.label = label
 			end

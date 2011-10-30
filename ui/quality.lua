@@ -25,19 +25,12 @@ frame:SetScript('OnShow', function(self)
 	self:SetScript('OnShow', nil)
 end)
 
-local createFontString = function(parent, template)
-	local label = parent:CreateFontString(nil, nil, template or 'GameFontHighlight')
-	label:SetJustifyH'LEFT'
-
-	return label
-end
-
 function frame:CreateOptions()
-	local title = createFontString(self, 'GameFontNormalLarge')
+	local title = ns.createFontString(self, 'GameFontNormalLarge')
 	title:SetPoint('TOPLEFT', 16, -16)
 	title:SetText'oGlow: Quality filter'
 
-	local thresLabel = createFontString(self, 'GameFontNormalSmall')
+	local thresLabel = ns.createFontString(self, 'GameFontNormalSmall')
 	thresLabel:SetPoint('TOPLEFT', title, 'BOTTOMLEFT', 0, -16)
 	thresLabel:SetText('Quality Threshold')
 
