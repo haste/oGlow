@@ -21,7 +21,7 @@ end
 local pipe = function(self)
 	if(oGlow:IsPipeEnabled'char-flyout') then
 		local location, id = self.location
-		if(location and location < PDFITEMFLYOUT_FIRST_SPECIAL_LOCATION) then
+		if(location and location < EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION) then
 			id = getID(location)
 		end
 
