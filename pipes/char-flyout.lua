@@ -28,7 +28,7 @@ local pipe = function(self)
 end
 
 local update = function(self)
-	local buttons = PaperDollFrameItemFlyout.buttons
+	local buttons = EquipmentFlyoutFrame.buttons
 	for _, button in next, buttons do
 		pipe(button)
 	end
@@ -42,7 +42,7 @@ local enable = function(self)
 end
 
 local disable = function(self)
-	local buttons = PaperDollFrameItemFlyout.buttons
+	local buttons = EquipmentFlyoutFrame.buttons
 	for _, button in next, buttons do
 		self:CallFilters('char-flyout', button)
 	end
