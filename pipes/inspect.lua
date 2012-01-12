@@ -1,10 +1,10 @@
 -- TODO:
---  - Clean up the dupe code.
 --  - Write a description.
 -- we might want to merge this with char.lua...
 
 if(select(4, GetAddOnInfo("Fizzle"))) then return end
 
+local _E
 local slots = {
 	"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 	"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
@@ -55,7 +55,7 @@ local update = function(self)
 			pollFrame:Show()
 		end
 
-		oGlow:CallFilters('inspect', _G["Inspect"..slotName.."Slot"], itemLink)
+		oGlow:CallFilters('inspect', _G["Inspect"..slotName.."Slot"], _E and itemLink)
 	end
 end
 
@@ -80,6 +80,8 @@ local function ADDON_LOADED(self, event, addon)
 end
 
 local enable = function(self)
+	_E = true
+
 	if(IsAddOnLoaded("Blizzard_InspectUI")) then
 		self:RegisterEvent('PLAYER_TARGET_CHANGED', update)
 		self:RegisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
@@ -90,6 +92,8 @@ local enable = function(self)
 end
 
 local disable = function(self)
+	_E = nil
+
 	self:UnregisterEvent('ADDON_LOADED', ADDON_LOADED)
 	self:UnregisterEvent('PLAYER_TARGET_CHANGED', update)
 	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
@@ -97,11 +101,7 @@ local disable = function(self)
 
 	pollFrame:Hide()
 
-	if(not InspectFrame) then return end
-
-	for i, slotName in next, slots do
-		oGlow:CallFilters('inspect', _G["Inspect"..slotName.."Slot"])
-	end
+	update(self)
 end
 
 oGlow:RegisterPipe('inspect', enable, disable, update, 'Inspect frame', nil)
