@@ -1,9 +1,9 @@
 -- TODO:
---  - Clean up the dupe code.
 --  - Prevent unnecessary double updates.
 --  - Write a description.
 
 local hook
+local _E
 
 local getID = function(loc)
 	local player, bank, bags, slot, bag = EquipmentManager_UnpackLocation(loc)
@@ -23,7 +23,7 @@ local pipe = function(self)
 			id = getID(location)
 		end
 
-		return oGlow:CallFilters('char-flyout', self, id)
+		return oGlow:CallFilters('char-flyout', self, _E and id)
 	end
 end
 
@@ -35,6 +35,8 @@ local update = function(self)
 end
 
 local enable = function(self)
+	_E = true
+
 	if(not hook) then
 		hooksecurefunc('EquipmentFlyout_DisplayButton', pipe)
 		hook = true
@@ -42,10 +44,9 @@ local enable = function(self)
 end
 
 local disable = function(self)
-	local buttons = EquipmentFlyoutFrame.buttons
-	for _, button in next, buttons do
-		self:CallFilters('char-flyout', button)
-	end
+	_E = nil
+
+	update(self)
 end
 
 oGlow:RegisterPipe('char-flyout', enable, disable, update, 'Character equipment flyout frame', nil)
