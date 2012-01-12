@@ -54,6 +54,12 @@ local letter = function()
 	end
 end
 
+local update = function(self)
+	send(self)
+	inbox()
+	letter()
+end
+
 local enable = function(self)
 	self:RegisterEvent('MAIL_SHOW', send)
 	self:RegisterEvent('MAIL_SEND_INFO_UPDATE', send)
@@ -78,12 +84,6 @@ local disable = function(self)
 	for i=1, ATTACHMENTS_MAX_RECEIVE do
 		oGlow:CallFilters('mail', _G["OpenMailAttachmentButton"..i])
 	end
-end
-
-local update = function(self)
-	send(self)
-	inbox()
-	letter()
 end
 
 oGlow:RegisterPipe('mail', enable, disable, update, 'Mail frame', nil)
