@@ -43,7 +43,6 @@ local disable = function(self)
 
 		self:CallFilters('gbank', _G["GuildBankColumn"..column.."Button"..index])
 	end
-
 end
 
 oGlow:RegisterPipe('gbank', enable, disable, update, 'Guild bank frame', nil)
