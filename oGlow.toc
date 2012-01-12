@@ -29,6 +29,7 @@ pipes\tradeskill.lua
 pipes\merchant.lua
 pipes\mail.lua
 pipes\char-flyout.lua
+pipes\voidstorage.lua
 
 displays\border.lua
 
