@@ -25,7 +25,7 @@ local itemInfoReceived = function()
 	for i, slotName in next, _MISSING do
 		local itemLink = GetInventoryItemLink(unit, i)
 		if(itemLink) then
-			oGlow:CallFilters('inspect', _G['Inspect' .. slotName .. 'Slot'], itemLink)
+			oGlow:CallFilters('inspect', _G['Inspect' .. slotName .. 'Slot'], _E and itemLink)
 
 			_MISSING[i] = nil
 		end
