@@ -26,8 +26,6 @@ local disable = function(self)
 
 	self:UnregisterEvent('BANKFRAME_OPENED', update)
 	self:UnregisterEvent('PLAYERBANKSLOTS_CHANGED', update)
-
-	update(self)
 end
 
 oGlow:RegisterPipe('bank', enable, disable, update, 'Player bank frame', nil)
