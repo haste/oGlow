@@ -33,7 +33,7 @@ local itemInfoReceived = function()
 end
 
 local update = function(self)
-	if(not InspectFrame or not InspectFrame:IsShown() or not oGlow:IsPipeEnabled'inspect') then return end
+	if(not InspectFrame or not InspectFrame:IsShown()) then return end
 
 	local unit = InspectFrame.unit
 	for i, slotName in next, slots do
