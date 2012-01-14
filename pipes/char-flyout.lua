@@ -17,14 +17,12 @@ local getID = function(loc)
 end
 
 local pipe = function(self)
-	if(oGlow:IsPipeEnabled'char-flyout') then
-		local location, id = self.location
-		if(location and location < EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION) then
-			id = getID(location)
-		end
-
-		return oGlow:CallFilters('char-flyout', self, _E and id)
+	local location, id = self.location
+	if(location and location < EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION) then
+		id = getID(location)
 	end
+
+	return oGlow:CallFilters('char-flyout', self, _E and id)
 end
 
 local update = function(self)
@@ -38,15 +36,16 @@ local enable = function(self)
 	_E = true
 
 	if(not hook) then
-		hooksecurefunc('EquipmentFlyout_DisplayButton', pipe)
-		hook = true
+		hook = function(...)
+			if(_E) then return pipe(...) end
+		end
+
+		hooksecurefunc('EquipmentFlyout_DisplayButton', hook)
 	end
 end
 
 local disable = function(self)
 	_E = nil
-
-	update(self)
 end
 
 oGlow:RegisterPipe('char-flyout', enable, disable, update, 'Character equipment flyout frame', nil)
