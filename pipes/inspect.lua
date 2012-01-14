@@ -11,36 +11,26 @@ local slots = {
 	"SecondaryHand", "Ranged", "Tabard",
 }
 
--- We need to poll until 4.0.3, or so.
 local _MISSING = {}
-local pollFrame = CreateFrame'Frame'
-pollFrame:Hide()
+local itemInfoReceived = function()
+	if(not next(_MISSING)) then
+		return
+	end
 
-local time = 3
-pollFrame:SetScript('OnUpdate', function(self, elapsed)
-	time = time + elapsed
+	local unit = InspectFrame.unit
+	if(not unit) then
+		table.wipe(_MISSING)
+	end
 
-	if(time >= 3) then
-		local unit = InspectFrame.unit
-		if(not unit) then
-			self:Hide()
-			table.wipe(_MISSING)
-		end
+	for i, slotName in next, _MISSING do
+		local itemLink = GetInventoryItemLink(unit, i)
+		if(itemLink) then
+			oGlow:CallFilters('inspect', _G['Inspect' .. slotName .. 'Slot'], itemLink)
 
-		for i, slotName in next, _MISSING do
-			local itemLink = GetInventoryItemLink(unit, i)
-			if(itemLink) then
-				oGlow:CallFilters('inspect', _G['Inspect' .. slotName .. 'Slot'], itemLink)
-
-				_MISSING[i] = nil
-			end
-		end
-
-		if(not next(_MISSING)) then
-			self:Hide()
+			_MISSING[i] = nil
 		end
 	end
-end)
+end
 
 local update = function(self)
 	if(not InspectFrame or not InspectFrame:IsShown() or not oGlow:IsPipeEnabled'inspect') then return end
@@ -51,8 +41,9 @@ local update = function(self)
 		local itemTexture = GetInventoryItemTexture(unit, i)
 
 		if(itemTexture and not itemLink) then
+			-- Force the client to request information from the server.
+			GetItemInfo(GetInventoryItemID(unit, i))
 			_MISSING[i] = slotName
-			pollFrame:Show()
 		end
 
 		oGlow:CallFilters('inspect', _G["Inspect"..slotName.."Slot"], _E and itemLink)
@@ -69,6 +60,7 @@ local function ADDON_LOADED(self, event, addon)
 	if(addon == "Blizzard_InspectUI") then
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", update)
 		self:RegisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
+		self:RegisterEvent('GET_ITEM_INFO_RECEIVED', itemInfoReceived)
 
 		-- We should check the first argument of this event later on.
 		-- Blizzard's code isn't actually updated yet, so it doesn't
@@ -86,6 +78,7 @@ local enable = function(self)
 		self:RegisterEvent('PLAYER_TARGET_CHANGED', update)
 		self:RegisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
 		self:RegisterEvent('INSPECT_READY', update)
+		self:RegisterEvent('GET_ITEM_INFO_RECEIVED', itemInfoReceived)
 	else
 		self:RegisterEvent("ADDON_LOADED", ADDON_LOADED)
 	end
@@ -98,8 +91,7 @@ local disable = function(self)
 	self:UnregisterEvent('PLAYER_TARGET_CHANGED', update)
 	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
 	self:UnregisterEvent('INSPECT_READY', update)
-
-	pollFrame:Hide()
+	self:UnregisterEvent('GET_ITEM_INFO_RECEIVED', itemInfoReceived)
 
 	update(self)
 end
