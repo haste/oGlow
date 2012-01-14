@@ -12,7 +12,7 @@ local slots = {
 }
 
 local update = function(self)
-	if(CharacterFrame:IsShown() and oGlow:IsPipeEnabled'char') then
+	if(CharacterFrame:IsShown()) then
 		for key, slotName in ipairs(slots) do
 			-- Ammo is located at 0.
 			local slotID = key % 20
@@ -36,16 +36,17 @@ local enable = function(self)
 	self:RegisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
 
 	if(not hook) then
-		CharacterFrame:HookScript('OnShow', update)
-		hook = true
+		hook = function(...)
+			if(_E) then return update(...) end
+		end
+
+		CharacterFrame:HookScript('OnShow', hook)
 	end
 end
 
 local disable = function(self)
 	_E = nil
 	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
-
-	update(self)
 end
 
 oGlow:RegisterPipe('char', enable, disable, update, 'Character frame', nil)
