@@ -42,8 +42,6 @@ end
 
 local disable = function(self)
 	_E = nil
-
-	update(self)
 end
 
 oGlow:RegisterPipe('bags', enable, disable, update, 'Bag containers', nil)
