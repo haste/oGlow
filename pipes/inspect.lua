@@ -92,8 +92,6 @@ local disable = function(self)
 	self:UnregisterEvent('UNIT_INVENTORY_CHANGED', UNIT_INVENTORY_CHANGED)
 	self:UnregisterEvent('INSPECT_READY', update)
 	self:UnregisterEvent('GET_ITEM_INFO_RECEIVED', itemInfoReceived)
-
-	update(self)
 end
 
 oGlow:RegisterPipe('inspect', enable, disable, update, 'Inspect frame', nil)
