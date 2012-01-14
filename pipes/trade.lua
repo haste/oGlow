@@ -37,8 +37,6 @@ local disable = function(self)
 	self:UnregisterEvent('TRADE_SHOW', update)
 	self:UnregisterEvent("TRADE_PLAYER_ITEM_CHANGED", player)
 	self:UnregisterEvent("TRADE_TARGET_ITEM_CHANGED", target)
-
-	update(self)
 end
 
 oGlow:RegisterPipe('trade', enable, disable, update, 'Trade frame', nil)
