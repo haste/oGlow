@@ -47,8 +47,6 @@ local disable = function(self)
 	self:UnregisterEvent('VOID_STORAGE_DEPOSIT_UPDATE', updateDeposit)
 	self:UnregisterEvent('VOID_TRANSFER_DONE', update)
 	self:UnregisterEvent('VOID_STORAGE_OPEN', update)
-
-	update(self)
 end
 
 oGlow:RegisterPipe('voidstore', enable, disable, update, 'Void storage frame', nil)
