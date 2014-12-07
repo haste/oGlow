@@ -1,11 +1,13 @@
 local _E
+local hooked
 
 local updateContents = function(self)
 	if(not IsAddOnLoaded'Blizzard_VoidStorageUI') then return end
 
 	for slot=1, VOID_WITHDRAW_MAX or 80 do
 		local slotFrame =  _G['VoidStorageStorageButton' .. slot]
-		self:CallFilters('voidstore', slotFrame, _E and (GetVoidItemInfo(slot)))
+		local page = _G['VoidStorageFrame'].page
+		self:CallFilters('voidstore', slotFrame, _E and (GetVoidItemInfo(page,slot)))
 	end
 
 	for slot=1, VOID_WITHDRAW_MAX or 9 do
@@ -23,7 +25,12 @@ end
 
 local update = function(self)
 	if(not IsAddOnLoaded'Blizzard_VoidStorageUI') then return end
-
+	if not hooked then -- This hook became necessary as there are no events that trigger this update.
+		hooksecurefunc("VoidStorage_SetPageNumber", function()
+			updateContents(self)
+		end)
+		hooked = true
+	end
 	for slot=1, VOID_DEPOSIT_MAX or 9 do
 		updateDeposit(self, nil, slot)
 	end
