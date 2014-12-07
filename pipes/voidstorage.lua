@@ -6,8 +6,8 @@ local updateContents = function(self)
 
 	for slot=1, VOID_WITHDRAW_MAX or 80 do
 		local slotFrame =  _G['VoidStorageStorageButton' .. slot]
-		local page = _G['VoidStorageFrame'].page
-		self:CallFilters('voidstore', slotFrame, _E and (GetVoidItemInfo(page,slot)))
+		local page = VoidStorageFrame.page
+		self:CallFilters('voidstore', slotFrame, _E and (GetVoidItemInfo(page, slot)))
 	end
 
 	for slot=1, VOID_WITHDRAW_MAX or 9 do
@@ -25,17 +25,28 @@ end
 
 local update = function(self)
 	if(not IsAddOnLoaded'Blizzard_VoidStorageUI') then return end
-	if not hooked then -- This hook became necessary as there are no events that trigger this update.
-		hooksecurefunc("VoidStorage_SetPageNumber", function()
-			updateContents(self)
-		end)
-		hooked = true
-	end
+
 	for slot=1, VOID_DEPOSIT_MAX or 9 do
 		updateDeposit(self, nil, slot)
 	end
 
 	return updateContents(self)
+end
+
+local function hookCheck(self)
+	if(not (
+		IsAddOnLoaded'Blizzard_VoidStorageUI'
+		and oGlow:IsPipeEnabled'voidstore'
+	)) then return end
+
+	if(not hooked) then
+		hooksecurefunc("VoidStorage_SetPageNumber", function()
+			updateContents(self)
+		end)
+		hooked = true
+
+		self:UnregisterEvent('VOID_STORAGE_OPEN', hookCheck)
+	end
 end
 
 local enable = function(self)
@@ -46,6 +57,7 @@ local enable = function(self)
 	self:RegisterEvent('VOID_STORAGE_UPDATE', update)
 	self:RegisterEvent('VOID_TRANSFER_DONE', update)
 	self:RegisterEvent('VOID_STORAGE_OPEN', update)
+	self:RegisterEvent('VOID_STORAGE_OPEN', hookCheck)
 end
 
 local disable = function(self)
@@ -56,6 +68,7 @@ local disable = function(self)
 	self:UnregisterEvent('VOID_STORAGE_UPDATE', update)
 	self:UnregisterEvent('VOID_TRANSFER_DONE', update)
 	self:UnregisterEvent('VOID_STORAGE_OPEN', update)
+	self:UnregisterEvent('VOID_STORAGE_OPEN', hookCheck)
 end
 
 oGlow:RegisterPipe('voidstore', enable, disable, update, 'Void storage frame', nil)
