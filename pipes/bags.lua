@@ -13,6 +13,11 @@ local pipe = function(self)
 
 		for i=1, size do
 			local bid = size - i + 1
+
+			if (string.match(name, "OneBagFrameBag")) then
+				bid = i;
+			end
+
 			local slotFrame = _G[name .. 'Item' .. bid]
 			local slotLink = GetContainerItemLink(id, i)
 
